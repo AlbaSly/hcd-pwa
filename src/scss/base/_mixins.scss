@@ -1,0 +1,31 @@
+@use "vars" as vars;
+
+@mixin small {
+  @media (min-width: vars.$width--xsm) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (min-width: vars.$width--sm) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: vars.$width--md) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (min-width: vars.$width--lg) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media (min-width: vars.$width--xl) {
+    @content;
+  }
+}

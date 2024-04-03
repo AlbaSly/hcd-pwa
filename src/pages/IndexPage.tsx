@@ -1,15 +1,13 @@
-import {Link} from "react-router-dom";
+import {Box} from "@chakra-ui/react";
 
 export const IndexPage = () => {
     return (
         <>
             <h1>Index</h1>
 
-            <Link to={'/app/test'}>Go to App Test Page</Link>
-
-            <hr/>
-
-            <Link to={'/auth/test'}>Go to Auth Test Page</Link>
+            <Box>
+                <h2>Esto es hijo de un Box Wrapper???</h2>
+            </Box>
         </>
     )
 }

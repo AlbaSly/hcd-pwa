@@ -1,3 +1,6 @@
+@use "typography" as typography;
+@use "mixins" as mixins;
+
 html {
   font-size: 62.5%;
   box-sizing: border-box;
@@ -7,6 +10,30 @@ html {
   box-sizing: inherit;
 }
 
+body {
+  font-family: typography.$font--paragraph;
+  font-size: 16px;
+}
+
+.container {
+  width: 95%;
+  max-width: 128rem;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: typography.$font--title;
+  margin: 0;
+}
+
 h1 {
   font-size: 6rem;
+
+  @include mixins.tablet {
+    font-size: 8rem;
+  }
+
+  @include mixins.laptop {
+    font-size: 10rem;
+  }
 }
