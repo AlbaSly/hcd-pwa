@@ -6,7 +6,6 @@ import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
-import { GoogleAuthService } from "../../services";
 import { useGoogleLogin } from "@react-oauth/google";
 
 
