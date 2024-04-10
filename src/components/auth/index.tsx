@@ -1,1 +1,1 @@
-export * from "./AuthHeadings";
+export * from "./AuthTitles";
