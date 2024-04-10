@@ -3,7 +3,7 @@ import {createBrowserRouter, RouteObject, RouterProvider} from "react-router-dom
 import {AuthRoutes} from "./AuthRoutes.tsx";
 import {AppRoutes} from "./AppRoutes.tsx";
 
-import { IndexPage, NotFoundPage } from "../pages";
+import { IndexScreen, ErrorScreen } from "../screens";
 
 const CoreRouter = () => {
     const routes: RouteObject = {
@@ -12,12 +12,12 @@ const CoreRouter = () => {
             {
                 index: true,
                 path: '',
-                element: <IndexPage />
+                element: <IndexScreen />
             },
             AuthRoutes,
             AppRoutes,
         ],
-        errorElement: <NotFoundPage />
+        errorElement: <ErrorScreen />
     }
 
     const router = createBrowserRouter([routes]);

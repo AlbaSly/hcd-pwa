@@ -1,7 +1,7 @@
 import {Navigate, RouteObject} from "react-router-dom";
 
 import AppLayout from "../layouts/AppLayout.tsx";
-import {AppTestPage} from "../pages/app";
+import { AppTestScreen } from "../screens/app";
 
 export const AppRoutes: RouteObject = {
     path: '/app',
@@ -17,7 +17,7 @@ export const AppRoutes: RouteObject = {
         {
             index: true,
             path: 'test',
-            element: <AppTestPage />
+            element: <AppTestScreen />
         }
     ]
 }

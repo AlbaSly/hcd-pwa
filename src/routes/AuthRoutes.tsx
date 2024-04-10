@@ -1,7 +1,8 @@
 import {Navigate, RouteObject} from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout.tsx";
-import {AuthTestPage} from "../pages/auth";
+
+import { LoginScreen, PasswordRecoveryScreen, SignUpScreen} from "../screens/auth";
 
 export const AuthRoutes: RouteObject = {
     path: '/auth',
@@ -12,12 +13,20 @@ export const AuthRoutes: RouteObject = {
          */
         {
             path: '',
-            element: <Navigate to={'test'} />
+            element: <Navigate to={'login'}/>
         },
         {
             index: true,
-            path: 'test',
-            element: <AuthTestPage />
+            path: 'login',
+            element: <LoginScreen />
+        },
+        {
+            path: 'signup',
+            element: <SignUpScreen />
+        },
+        {
+            path: 'password-recovery',
+            element: <PasswordRecoveryScreen />
         },
     ]
 }
