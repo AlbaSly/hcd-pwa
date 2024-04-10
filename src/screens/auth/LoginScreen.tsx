@@ -41,7 +41,7 @@ export const LoginScreen = () => {
             <Card
                 className={[
                     "animate__animated animate__fadeInUp animate__faster",
-                    "container md:w-6 p-8",
+                    "container lg:w-6 p-8",
                 ].join(" ")}
             >
 

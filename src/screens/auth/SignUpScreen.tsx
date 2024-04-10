@@ -47,7 +47,7 @@ export const SignUpScreen = () => {
             <Card
                 className={[
                     "animate__animated animate__fadeInUp animate__faster",
-                    "container md:w-6 p-8 mb-4",
+                    "container lg:w-6 p-8 mb-4",
                 ].join(" ")}
             >
                 <Button
