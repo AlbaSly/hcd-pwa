@@ -1,15 +1,27 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-import {ChakraProvider} from "@chakra-ui/react";
+import { PrimeReactProvider } from "primereact/API";
+
+// Theme
+import "primereact/resources/themes/lara-light-green/theme.css";
+// Core
+import "primereact/resources/primereact.min.css";
+// Icons
+import "primeicons/primeicons.css";
+// Primeflex
+import "primeflex/primeflex.css";
+// Animate.css
+import 'animate.css';
+// Index
+import './scss/index.scss';
 
 import App from './App.tsx'
-import './scss/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-      <ChakraProvider>
-          <App />
-      </ChakraProvider>
+      <PrimeReactProvider>
+        <App />
+      </PrimeReactProvider>
   </React.StrictMode>,
 )
