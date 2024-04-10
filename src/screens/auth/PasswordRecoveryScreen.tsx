@@ -21,7 +21,7 @@ export const PasswordRecoveryScreen = () => {
             <Card
                 className={[
                     "animate__animated animate__fadeInUp animate__faster",
-                    "container md:w-6 p-6",
+                    "container lg:w-6 p-6",
                 ].join(" ")}
             >
                 <form className="py-4">
