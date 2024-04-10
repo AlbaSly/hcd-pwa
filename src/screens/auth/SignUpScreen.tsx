@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 
-import { AuthHeadings } from "../../components/auth";
+import { AuthTitles } from "../../components/auth";
 import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
@@ -12,7 +12,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 
 export const SignUpScreen = () => {
 
-    const [ userFormData, setUserFormData ] = useState({
+    const [userFormData, setUserFormData] = useState({
         name: "",
         lastName: "",
         email: "",
@@ -20,11 +20,11 @@ export const SignUpScreen = () => {
         repeatedPassword: "",
     });
 
-    const updateName = (value: string) => setUserFormData({...userFormData, name: value});
-    const updateLastName = (value: string) => setUserFormData({...userFormData, lastName: value});
-    const updateEmail = (value: string) => setUserFormData({...userFormData, email: value});
-    const updatePassword = (value: string) => setUserFormData({...userFormData, password: value});
-    const updateRepeatedPassword = (value: string) => setUserFormData({...userFormData, repeatedPassword: value});
+    const updateName = (value: string) => setUserFormData({ ...userFormData, name: value });
+    const updateLastName = (value: string) => setUserFormData({ ...userFormData, lastName: value });
+    const updateEmail = (value: string) => setUserFormData({ ...userFormData, email: value });
+    const updatePassword = (value: string) => setUserFormData({ ...userFormData, password: value });
+    const updateRepeatedPassword = (value: string) => setUserFormData({ ...userFormData, repeatedPassword: value });
 
     const connectWithGoogle = useGoogleLogin({
         onSuccess: tokenResponse => {
@@ -39,7 +39,7 @@ export const SignUpScreen = () => {
 
     return (
         <div className="h-full overflow-y-auto">
-            <AuthHeadings
+            <AuthTitles
                 title="Registrarse"
                 info="Crea una cuenta para entrar a la aplicación."
             />
