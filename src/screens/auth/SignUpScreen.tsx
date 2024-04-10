@@ -30,6 +30,7 @@ export const SignUpScreen = () => {
     const connectWithGoogle = useGoogleLogin({
         onSuccess: tokenResponse => {
             /**Handle response */
+            console.log(tokenResponse);
         },
         onError: () => {
             /**Handle error */

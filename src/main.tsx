@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-import { PrimeReactProvider } from "primereact/API";
+import { PrimeReactProvider } from "primereact/api";
 
 // Theme
 import "primereact/resources/themes/lara-light-green/theme.css";
