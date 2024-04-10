@@ -1,0 +1,35 @@
+@use "../base/colors" as colors;
+
+.auth-layout__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    z-index: -100;
+
+    background-image: url('/img/hero-2.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+
+    &-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(colors.$color--main, .65);
+    }
+}
+
+.auth-layout__second-background {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50vh;
+    z-index: -100;
+
+    background-color: colors.$color--main;
+}

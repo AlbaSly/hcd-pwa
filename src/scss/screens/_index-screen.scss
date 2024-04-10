@@ -1,0 +1,28 @@
+@use "../base/colors" as colors;
+
+.hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 25vh;
+  width: 100vw;
+  z-index: -100;
+
+  background-image: url("/img/hero-1.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.hero__content {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.join-button-container {
+  position: absolute;
+  height: 150vh;
+  width: 100vw;
+}

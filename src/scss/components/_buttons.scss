@@ -1,0 +1,42 @@
+@use '../base/colors' as colors;
+@use '../base/mixins' as mixins;
+
+.button {
+  @include mixins.drop-shadow-md;
+  transition: all ease-in 85ms, background-color ease-out 150ms;
+
+  padding: 16px 32px;
+  border: 2.5px solid gray;
+  border-radius: 8px;
+
+  color: darken(gray, 10%);
+  font-size: 1.8rem;
+  font-weight: 500;
+
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+
+  @include mixins.tablet() {
+    padding: 20px 32px;
+    width: 256px;
+    font-size: 2rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+    @include mixins.drop-shadow-lg;
+  }
+}
+
+.button-index {
+  border-color: transparent;
+  color: colors.$color--white;
+  background-color: darken(colors.$color--helper-darker, 10%);
+  filter: drop-shadow(0 4px 6px darken(colors.$color--helper-darker, 10%)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+
+  &:hover {
+    background-color: colors.$color--helper-darker;
+    filter: drop-shadow(0 4px 6px colors.$color--helper-darker) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
+  }
+}

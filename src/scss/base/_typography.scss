@@ -5,10 +5,12 @@
 */
 
 // Lato font (200, 400, 500, 700)
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@200;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@200;400;500;600;700;900&display=swap');
 
 // Karla font (200, 400, 500, 700)
-@import url('https://fonts.googleapis.com/css2?family=Karla:wght@200;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@200;400;500;600;700&display=swap');
 
 $font--title: 'Lato', sans-serif;
 $font--paragraph: 'Karla', sans-serif;
+
+$font--shadow: 2px 3px 5px rgba(0,0,0,0.15);

@@ -1,9 +1,11 @@
+@use "colors" as colors;
 @use "typography" as typography;
 @use "mixins" as mixins;
 
 html {
   font-size: 62.5%;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 *, *::before, *::after {
@@ -11,29 +13,48 @@ html {
 }
 
 body {
-  font-family: typography.$font--paragraph;
+  font-family: typography.$font--paragraph !important;
+  font-weight: 400;
   font-size: 16px;
 }
 
-.container {
-  width: 95%;
-  max-width: 128rem;
-  margin: 0 auto;
-}
-
 h1, h2, h3, h4, h5, h6 {
-  font-family: typography.$font--title;
+  font-family: typography.$font--title !important;
+  font-weight: 500;
   margin: 0;
 }
 
 h1 {
-  font-size: 6rem;
 
-  @include mixins.tablet {
-    font-size: 8rem;
+  font-size: 4rem;
+  color: colors.$color--main;
+  font-weight: 900;
+
+  &.index {
+    color: colors.$color--white;
+    text-shadow: typography.$font--shadow;
+    font-size: 3rem;
+
+    @include mixins.tablet {
+      font-size: 4.5rem;
+    }
   }
+}
 
-  @include mixins.laptop {
-    font-size: 10rem;
+strong {
+  color: colors.$color--helper;
+}
+
+h2 {
+  font-size: 3rem;
+
+  &.index {
+    color: colors.$color--white;
+    text-shadow: typography.$font--shadow;
+    font-size: 2.5rem;
+
+    @include mixins.tablet {
+      font-size: 4rem;
+    }
   }
 }
