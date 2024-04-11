@@ -1,9 +1,12 @@
 import {Navigate, RouteObject} from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout.tsx";
-
 import { LoginScreen, PasswordRecoveryScreen, SignUpScreen} from "../screens/auth";
 
+
+/**
+ * Rutas del módulo Auth
+ */
 export const AuthRoutes: RouteObject = {
     path: '/auth',
     element: <AuthLayout />,

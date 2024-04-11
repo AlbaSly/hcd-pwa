@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import {Outlet} from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+
 import { LayoutLoader } from "../components";
 
+
+/**
+ * Layout para renderizar las rutas relacionadas al módulo App
+ * @returns JSX.Element
+ */
 const AppLayout = () => {
 
     const [ loading, setLoading ] = useState(true);
+
+    const location = useLocation();
 
     useEffect(() => {
         const handleDOMLoad = setTimeout(() => {
@@ -16,6 +24,11 @@ const AppLayout = () => {
         }
     }, []);
 
+    useEffect(() => {
+        scrollTo({top: 0});
+    }, [location]);
+
+    
     if (loading) return (
         <LayoutLoader />
     )

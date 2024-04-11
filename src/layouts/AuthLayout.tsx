@@ -1,11 +1,15 @@
-import {Outlet, useLocation} from "react-router-dom";
-
-import { LayoutLoader, ScreenContainer } from "../components";
 import { useEffect, useState } from "react";
+import {Outlet, useLocation} from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import { GoogleAuthService } from "../services";
+import { LayoutLoader, ScreenContainer } from "../components";
 
 
+/**
+ * Layout para renderizar las rutas relacionadas al módulo Auth
+ * @returns JSX.Element
+ */
 const AuthLayout = () => {
 
     const [ loading, setLoading ] = useState(true);
@@ -29,7 +33,6 @@ const AuthLayout = () => {
     }, [location]);
 
     
-
     if (loading) return (
         <LayoutLoader />
     )

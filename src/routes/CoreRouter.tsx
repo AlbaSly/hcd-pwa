@@ -5,6 +5,11 @@ import {AppRoutes} from "./AppRoutes.tsx";
 
 import { IndexScreen, ErrorScreen } from "../screens";
 
+
+/**
+ * Router para gestionar diferentes rutas separadas
+ * @returns JSX.Element
+ */
 const CoreRouter = () => {
     const routes: RouteObject = {
         path: '/',
