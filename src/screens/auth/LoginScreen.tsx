@@ -32,7 +32,7 @@ export const LoginScreen = () => {
     });
 
     return (
-        <div className="h-full overflow-y-auto flex flex-column align-items-center justify-content-center">
+        <div className="h-full flex flex-column align-items-center justify-content-center">
             <AuthTitles
                 title="Bienvenido"
                 info="Inicie sesión para acceder a la aplicación."
