@@ -1,4 +1,4 @@
-import {Navigate, RouteObject} from "react-router-dom";
+import { RouteObject} from "react-router-dom";
 
 import AppLayout from "../layouts/AppLayout.tsx";
 import { AppTestScreen, HomeScreen } from "../screens/app";
@@ -18,5 +18,9 @@ export const AppRoutes: RouteObject = {
             path: '',
             element: <HomeScreen />
         },
+        {
+            path: 'test',
+            element: <AppTestScreen />
+        }
     ]
 }
