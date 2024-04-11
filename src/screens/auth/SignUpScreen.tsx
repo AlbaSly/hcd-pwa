@@ -8,10 +8,7 @@ import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 
-
-
 export const SignUpScreen = () => {
-
     const [userFormData, setUserFormData] = useState({
         name: "",
         lastName: "",
@@ -27,14 +24,13 @@ export const SignUpScreen = () => {
     const updateRepeatedPassword = (value: string) => setUserFormData({ ...userFormData, repeatedPassword: value });
 
     const connectWithGoogle = useGoogleLogin({
-        onSuccess: tokenResponse => {
+        onSuccess: (tokenResponse) => {
             /**Handle response */
             console.log(tokenResponse);
         },
         onError: () => {
             /**Handle error */
         },
-        flow: 'auth-code',
     });
 
     return (
@@ -61,8 +57,7 @@ export const SignUpScreen = () => {
                     Registrar con Google
                 </Button>
 
-                <p className="text-center my-4">ó</p>
-                <hr className="mb-8" />
+                <hr className="my-6" />
 
                 {/* FORMULARIO */}
                 <form autoComplete="off">
@@ -133,7 +128,10 @@ export const SignUpScreen = () => {
                     </div>
 
                     <div className="flex flex-column gap-2 my-4">
-                        <label htmlFor="repeatedPassword" className="font-semibold">
+                        <label
+                            htmlFor="repeatedPassword"
+                            className="font-semibold"
+                        >
                             Repetir la contraseña
                         </label>
                         <Password
@@ -141,7 +139,9 @@ export const SignUpScreen = () => {
                             name="repeatedPassword"
                             type="repeatedPassword"
                             value={userFormData.password}
-                            onChange={(e) => updateRepeatedPassword(e.target.value)}
+                            onChange={(e) =>
+                                updateRepeatedPassword(e.target.value)
+                            }
                             placeholder="Confirmar contraseña"
                             feedback={false}
                             // weakLabel="Contraseña débil"
@@ -153,7 +153,6 @@ export const SignUpScreen = () => {
                         />
                     </div>
 
-
                     <div className="flex flex-col md:flex-row-reverse mt-8">
                         <Button
                             type="submit"
@@ -163,10 +162,11 @@ export const SignUpScreen = () => {
                             Crear Cuenta
                         </Button>
                     </div>
-
                 </form>
 
-                <Link to={'/auth/login'} className="text-center block mt-4">Regresar</Link>
+                <Link to={"/auth/login"} className="text-center block mt-4">
+                    Regresar
+                </Link>
             </Card>
         </div>
     );
