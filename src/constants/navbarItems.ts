@@ -1,9 +1,7 @@
+/**
+ * Constante que contiene un arreglo de elementos INavbarItem para la gestión de barras de navegación.
+ */
 export const navbarItems: INavbarItem[] = [
-    {
-        icon: 'pi pi-home',
-        label: 'Inicio',
-        goTo: '/app'
-    },
     {
         icon: 'pi pi-credit-card',
         label: 'Transacciones',
@@ -13,6 +11,11 @@ export const navbarItems: INavbarItem[] = [
         icon: 'pi pi-chart-line',
         label: 'Estadísticas',
         goTo: '/app/stats'
+    },
+    {
+        icon: 'pi pi-home',
+        label: 'Inicio',
+        goTo: '/app'
     },
     {
         icon: 'pi pi-th-large',
@@ -26,6 +29,9 @@ export const navbarItems: INavbarItem[] = [
     }
 ]
 
+/**
+ * Interfaz que representa la estructura de un elemento de la barra de navegación
+ */
 export interface INavbarItem {
     icon: string;
     label: string;
