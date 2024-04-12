@@ -1,7 +1,7 @@
 import { RouteObject} from "react-router-dom";
 
 import AppLayout from "../layouts/AppLayout.tsx";
-import { AppTestScreen, HomeScreen } from "../screens/app";
+import { AppTestScreen, CategoriesScreen, HomeScreen, MyProfileScreen, StatsScreen, TransactionsScreen } from "../screens/app";
 
 /**SOLO DEV */
 import AppAlexTestScreen from "../screens/app/AppAlexTestScreen.tsx";
@@ -21,6 +21,22 @@ export const AppRoutes: RouteObject = {
         {
             path: '',
             element: <HomeScreen />
+        },
+        {
+            path: 'transactions',
+            element: <TransactionsScreen />
+        },
+        {
+            path: 'stats',
+            element: <StatsScreen />
+        },
+        {
+            path: 'categories',
+            element: <CategoriesScreen />
+        },
+        {
+            path: 'me',
+            element: <MyProfileScreen />
         },
         {
             path: 'test',
