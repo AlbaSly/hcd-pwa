@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import { LayoutLoader } from "../components";
+import { BottomNavbar } from "../components/layout/Navbar";
+import { SidebarMenu } from "../components/layout/Sidebar";
 
 
 /**
@@ -34,11 +36,14 @@ const AppLayout = () => {
     )
 
     return (
-        <>
-            <h1>AppLayout</h1>
+        <div className="bg-gray-100">
+            <SidebarMenu location={location}/>
+            <div className="h-screen w-screen overflow-y-auto">
+                <Outlet />
+            </div>
 
-            <Outlet/>
-        </>
+            <BottomNavbar location={location} />
+        </div>
     );
 };
 
