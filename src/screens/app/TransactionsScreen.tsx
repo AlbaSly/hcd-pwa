@@ -1,3 +1,11 @@
+import { AppTitle } from "../../components/app";
+
 export const TransactionsScreen = () => {
-    return <div>TransactionsScreen</div>;
+    return (
+        <>
+            <AppTitle>
+                <h1>Transacciones</h1>
+            </AppTitle>
+        </>
+    )
 };

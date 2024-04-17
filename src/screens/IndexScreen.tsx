@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-import { ScreenContainer } from "../components";
-
 export const IndexScreen = () => {
 
     const navigate = useNavigate();
@@ -11,7 +9,7 @@ export const IndexScreen = () => {
     }
 
     return (
-        <ScreenContainer>
+        <div className="screen">
             <div className={"hero flex-col center-center"}>
                 <div
                     className={
@@ -33,7 +31,7 @@ export const IndexScreen = () => {
                             className={
                                 "index animate__animated animate__fadeInLeft"
                             }
-                            style={{ marginTop: "2rem" }}
+                            style={{ marginTop: "20px" }}
                         >
                             Gestiona tus{" "}
                             <strong style={{ fontWeight: 700 }}>gastos</strong>{" "}
@@ -48,7 +46,7 @@ export const IndexScreen = () => {
                             className={
                                 "index animate__animated animate__delay-1s animate__fadeIn"
                             }
-                            style={{ marginTop: "2rem" }}
+                            style={{ marginTop: "20px" }}
                         >
                             Cuando quieras, donde quieras.
                         </h2>
@@ -67,6 +65,6 @@ export const IndexScreen = () => {
                     Comenzar
                 </button>
             </div>
-        </ScreenContainer>
+        </div>
     );
 };

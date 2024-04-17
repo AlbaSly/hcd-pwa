@@ -1,5 +1,11 @@
+import { AppTitle } from "../../components/app"
+
 export const HomeScreen = () => {
     return (
-        <h1>HomeScreen</h1>
+        <>
+            <AppTitle>
+                <h1>Buenos días, <span>Usuario</span></h1>
+            </AppTitle>
+        </>
     )
 }

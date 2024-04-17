@@ -7,6 +7,8 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import { FloatLabel } from "primereact/floatlabel";
+import axios from "axios";
 
 export const SignUpScreen = () => {
     const [userFormData, setUserFormData] = useState({
@@ -26,148 +28,122 @@ export const SignUpScreen = () => {
     const connectWithGoogle = useGoogleLogin({
         onSuccess: (tokenResponse) => {
             /**Handle response */
-            console.log(tokenResponse);
+            axios.get(import.meta.env.VITE_API_URL + `/google-auth/connect?access_token=${tokenResponse.access_token}&auth_method=${'signup'}`).then(response => {
+                console.log(response);
+            })
+            .catch(e => console.log(e));
         },
-        onError: () => {
+        onError: (error) => {
             /**Handle error */
+            console.log(error.error_description);
         },
     });
 
     return (
-        <div className="h-full overflow-y-auto">
-            <AuthTitles
+        <>
+            <AuthTitles 
                 title="Registrarse"
-                info="Crea una cuenta para entrar a la aplicación."
+                info="Crea una cuenta para registrarte en la aplicación"
             />
 
             <Card
                 className={[
                     "animate__animated animate__fadeInUp animate__faster",
-                    "container lg:w-6 p-8 mb-4",
-                ].join(" ")}
+                    "container lg:w-6 p-4",
+                ].join(" ")}            
             >
-                <Button
-                    onClick={() => connectWithGoogle()}
-                    icon="pi pi-google"
-                    className="flex justify-content-center gap-2 mx-auto w-full md:w-4"
-                    size="large"
-                    raised
-                    severity="danger"
-                >
-                    Registrar con Google
-                </Button>
-
-                <hr className="my-6" />
-
-                {/* FORMULARIO */}
                 <form autoComplete="off">
-                    <div className="flex flex-column gap-2 my-4">
-                        <label htmlFor="name" className="font-semibold">
-                            Nombre(s)
-                        </label>
-                        <InputText
-                            id="name"
-                            name="name"
-                            type="name"
-                            value={userFormData.name}
-                            onChange={(e) => updateName(e.target.value)}
-                            className="p-inputtext-lg p-4 text-2xl"
-                            placeholder="John"
-                        />
+
+                    <Button 
+                        type="button"
+                        onClick={() => connectWithGoogle()}
+                        icon="pi pi-google"
+                        severity="danger"
+                        raised
+                        size="small"
+                        className="block w-full md:w-6 mx-auto flex justify-content-center gap-2"
+                    >
+                        Conectar con Google
+                    </Button>
+
+                    <hr className="my-4 text-gray-200"/>
+
+                    <div className="flex flex-column" style={{gap: '30px'}}>
+                        <FloatLabel>
+                            <InputText
+                                type="text"
+                                id="name"
+                                value={userFormData.name}
+                                onChange={(e) => updateName(e.target.value)}
+                                className="w-full"
+                            />
+                            <label htmlFor="name">Nombre(s)</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <InputText
+                                type="text"
+                                id="lastname"
+                                value={userFormData.lastName}
+                                onChange={(e) => updateLastName(e.target.value)}
+                                className="w-full"
+                            />
+                            <label htmlFor="lastname">Apellido(s)</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <InputText
+                                type="email"
+                                id="email"
+                                value={userFormData.email}
+                                onChange={(e) => updateEmail(e.target.value)}
+                                className="w-full"
+                            />
+                            <label htmlFor="email">Correo Electrónico</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <Password 
+                                type="password"
+                                id="password"
+                                value={userFormData.password}
+                                onChange={(e) => updatePassword(e.target.value)}
+                                feedback={false}
+                                className="w-full"
+                                inputClassName="w-full"
+                                toggleMask
+                            />
+                            <label htmlFor="password">Contraseña</label>
+                        </FloatLabel>
+
+                        <FloatLabel>
+                            <Password 
+                                type="password"
+                                id="repeated-password"
+                                value={userFormData.repeatedPassword}
+                                onChange={(e) => updateRepeatedPassword(e.target.value)}
+                                feedback={false}
+                                className="w-full"
+                                inputClassName="w-full"
+                                toggleMask
+                            />
+                            <label htmlFor="repeated-password">Repetir contraseña</label>
+                        </FloatLabel>
                     </div>
 
-                    <div className="flex flex-column gap-2 my-4">
-                        <label htmlFor="lastName" className="font-semibold">
-                            Apellido(s)
-                        </label>
-                        <InputText
-                            id="lastName"
-                            name="lastName"
-                            type="lastName"
-                            value={userFormData.lastName}
-                            onChange={(e) => updateLastName(e.target.value)}
-                            className="p-inputtext-lg p-4 text-2xl"
-                            placeholder="Doe"
-                        />
-                    </div>
-
-                    <div className="flex flex-column gap-2 my-4">
-                        <label htmlFor="email" className="font-semibold">
-                            Correo Electrónico
-                        </label>
-                        <InputText
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={userFormData.email}
-                            onChange={(e) => updateEmail(e.target.value)}
-                            className="p-inputtext-lg p-4 text-2xl"
-                            placeholder="ej: john.doe@email.com"
-                        />
-                    </div>
-
-                    <div className="flex flex-column gap-2 my-4">
-                        <label htmlFor="password" className="font-semibold">
-                            Contraseña
-                        </label>
-                        <Password
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={userFormData.password}
-                            onChange={(e) => updatePassword(e.target.value)}
-                            placeholder="Su contraseña"
-                            feedback={false}
-                            // weakLabel="Contraseña débil"
-                            // mediumLabel="Contraseña segura"
-                            // strongLabel="Contraseña muy segura"
-                            className="toggleMask"
-                            inputClassName="p-4 text-2xl w-full"
-                            toggleMask
-                        />
-                    </div>
-
-                    <div className="flex flex-column gap-2 my-4">
-                        <label
-                            htmlFor="repeatedPassword"
-                            className="font-semibold"
-                        >
-                            Repetir la contraseña
-                        </label>
-                        <Password
-                            id="repeatedPassword"
-                            name="repeatedPassword"
-                            type="repeatedPassword"
-                            value={userFormData.password}
-                            onChange={(e) =>
-                                updateRepeatedPassword(e.target.value)
-                            }
-                            placeholder="Confirmar contraseña"
-                            feedback={false}
-                            // weakLabel="Contraseña débil"
-                            // mediumLabel="Contraseña segura"
-                            // strongLabel="Contraseña muy segura"
-                            className="toggleMask"
-                            inputClassName="p-4 text-2xl w-full"
-                            toggleMask
-                        />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row-reverse mt-8">
-                        <Button
+                    <div className="flex flex-col mt-4">
+                        <Button 
                             type="submit"
-                            className="block w-full md:w-4 mx-auto my-2 mt-8 p-4 text-2xl"
                             raised
+                            className="block w-full md:w-4 mx-auto my-2 font-medium"
                         >
                             Crear Cuenta
                         </Button>
                     </div>
-                </form>
 
-                <Link to={"/auth/login"} className="text-center block mt-4">
-                    Regresar
-                </Link>
+                    <Link to={"/auth/login"} className="block my-2 text-center text-gray-500 no-underline hover:underline">Regresar</Link>
+                </form>
             </Card>
-        </div>
+        </>
     );
 };

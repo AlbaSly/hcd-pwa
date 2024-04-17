@@ -1,3 +1,11 @@
+import { AppTitle } from "../../components/app";
+
 export const MyProfileScreen = () => {
-    return <div>MyProfileScreen</div>;
+    return (
+        <>
+            <AppTitle>
+                <h1>Mi <span>Perfil</span></h1>
+            </AppTitle>
+        </>
+    )
 };
