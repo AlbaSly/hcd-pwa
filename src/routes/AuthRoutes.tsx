@@ -2,6 +2,7 @@ import {Navigate, RouteObject} from "react-router-dom";
 
 import AuthLayout from "../layouts/AuthLayout.tsx";
 import { LoginScreen, PasswordRecoveryScreen, SignUpScreen} from "../screens/auth";
+import { ConfirmCodeScreen } from "../screens/auth/ConfirmCodeScreen.tsx";
 
 
 /**
@@ -31,5 +32,9 @@ export const AuthRoutes: RouteObject = {
             path: 'password-recovery',
             element: <PasswordRecoveryScreen />
         },
+        {
+            path: 'confirm-code',
+            element: <ConfirmCodeScreen />
+        }
     ]
 }
