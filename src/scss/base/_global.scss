@@ -3,58 +3,76 @@
 @use "mixins" as mixins;
 
 html {
-  font-size: 62.5%;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
 }
 
 body {
-  font-family: typography.$font--paragraph !important;
-  font-weight: 400;
-  font-size: 16px;
+    padding: 0;
+    margin: 0;
+    font-family: typography.$font--paragraph !important;
+    font-weight: 400;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: typography.$font--title !important;
-  font-weight: 500;
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: typography.$font--title !important;
+    font-weight: 500;
+    margin: 0;
 }
 
 h1 {
 
-  font-size: 4rem;
-  color: colors.$color--main;
-  font-weight: 900;
+    font-size: 40px;
+    color: colors.$color--black;
+    font-weight: 900;
 
-  &.index {
-    color: colors.$color--white;
-    text-shadow: typography.$font--shadow;
-    font-size: 3rem;
+    &.index {
+        color: colors.$color--white;
+        text-shadow: typography.$font--shadow;
+        font-size: 30px;
 
-    @include mixins.tablet {
-      font-size: 4.5rem;
+        @include mixins.tablet {
+            font-size: 45px;
+        }
     }
-  }
+
+    &>span {
+        color: colors.$color--main;
+    }
 }
 
 strong {
-  color: colors.$color--helper;
+    color: colors.$color--helper;
 }
 
 h2 {
-  font-size: 3rem;
+    font-size: 30px;
 
-  &.index {
-    color: colors.$color--white;
-    text-shadow: typography.$font--shadow;
-    font-size: 2.5rem;
+    &.index {
+        color: colors.$color--white;
+        text-shadow: typography.$font--shadow;
+        font-size: 25px;
 
-    @include mixins.tablet {
-      font-size: 4rem;
+        @include mixins.tablet {
+            font-size: 40px;
+        }
     }
-  }
+}
+
+h1 > span, p > span {
+    color: colors.$color--main;
+    font-weight: 700;
 }

@@ -1,5 +1,11 @@
 .toggleMask > svg {
     width: 20px;
     height: 20px;
-    transform: translateY(-18%);
+    transform: translateY(-20%);
 }
+
+.p-icon.p-password-show-icon, .p-icon.p-password-hide-icon {
+    position: absolute;
+    right: 10px;
+}
+

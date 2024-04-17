@@ -1,0 +1,29 @@
+.hide-scroll__fast {
+    overflow: auto;
+    animation: hide-scroll 800ms backwards;
+}
+
+.hide-scroll__faster {
+    overflow: auto;
+    animation: hide-scroll 500ms backwards;
+}
+
+.hide-scroll {
+    overflow: auto;
+    animation: hide-scroll 1s backwards;
+}
+
+.hide-scroll__slow {
+    overflow: auto;
+    animation: hide-scroll 2s backwards;
+}
+
+.hide-scroll__slower {
+    overflow: auto;
+    animation: hide-scroll 3s backwards;
+}
+//backwards
+
+@keyframes hide-scroll {
+    from, to { overflow: hidden; } 
+}

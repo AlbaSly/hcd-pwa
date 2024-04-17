@@ -2,7 +2,6 @@
 @use '../base/mixins' as mixins;
 
 .button {
-  @include mixins.drop-shadow-md;
   transition: all ease-in 85ms, background-color ease-out 150ms;
 
   padding: 16px 32px;
@@ -10,7 +9,7 @@
   border-radius: 8px;
 
   color: darken(gray, 10%);
-  font-size: 1.8rem;
+  font-size: 18px;
   font-weight: 500;
 
   display: block;
@@ -20,12 +19,11 @@
   @include mixins.tablet() {
     padding: 20px 32px;
     width: 256px;
-    font-size: 2rem;
+    font-size: 20px;
   }
 
   &:hover {
     cursor: pointer;
-    @include mixins.drop-shadow-lg;
   }
 }
 
