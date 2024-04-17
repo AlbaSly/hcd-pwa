@@ -17,7 +17,7 @@ type AuthTitlesProps = {
 export const AuthTitles = ({ title, info }: AuthTitlesProps) => {
 
     return (
-        <div className="my-4 text-center">
+        <div className="h-8rem my-4 text-center">
             <h1 style={{ color: "white" }}>{title}</h1>
             {
                 info && (

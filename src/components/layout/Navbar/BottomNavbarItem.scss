@@ -1,0 +1,28 @@
+/*
+ Estilos para los botones del tipo BottomNavbarItem.
+ Se sigue un patrón BEM para mejor legibilidad.
+*/
+.bottom-navbar__item {
+    /* Transition ligera  para los cambios en el transform y el filter*/
+    transition: transform .15s ease-in, filter .1s ease;
+
+    /* Remover algunos estilos de primereact */
+    outline: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-shadow: unset !important;
+
+    height: 40px;
+    width: 40px;
+
+    & > .p-button-icon {
+        font-size: 24px;
+    }
+
+    /* Estilos para el item seleccionado */
+    &--selected {
+        transform: translateY(-80%) scale(1.25);
+        filter: drop-shadow(0px 4px 6px var(--primary-color));
+    }
+}

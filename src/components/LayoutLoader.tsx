@@ -1,9 +1,8 @@
 import { ProgressBar } from "primereact/progressbar"
-import { ScreenContainer } from "./ScreenContainer"
 
 export const LayoutLoader = () => {
     return (
-        <ScreenContainer>
+        <div className="screen">
             <div className="fit-parent-size flex-col center-center animate__animated animate__fadeIn">
                 <div>
                     <figure>
@@ -12,6 +11,6 @@ export const LayoutLoader = () => {
                     <ProgressBar mode="indeterminate" style={{ height: '6px' }}></ProgressBar>
                 </div>
             </div>
-        </ScreenContainer>
+        </div>
     )
 }
