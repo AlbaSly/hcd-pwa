@@ -1,4 +1,10 @@
+@use "../base/mixins" as mixins;
 @import "../base/colors";
+
+#app-scroll-panel {
+    position: relative;
+    height: 90vh;
+}
 
 .screen {
   position: absolute;

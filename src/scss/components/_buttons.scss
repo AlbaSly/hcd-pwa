@@ -38,3 +38,32 @@
     filter: drop-shadow(0 4px 6px colors.$color--helper-darker) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
   }
 }
+
+button.transaction-button {
+    /* Remover algunos estilos de primereact */
+    outline: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+    position: fixed;
+    right: 16px;
+    bottom: 100px;
+
+    height: 72px;
+    width: 72px;
+
+    @include mixins.laptop {
+        height: 82px;
+        width: 82px;
+    }
+    
+    @include mixins.laptop {
+        bottom: 32px;
+    }
+
+    & > .p-button-icon {
+        font-weight: lighter;
+        font-size: 32px;
+    }
+}

@@ -4,6 +4,8 @@ import {AuthRoutes} from "./AuthRoutes.tsx";
 import {AppRoutes} from "./AppRoutes.tsx";
 
 import { IndexScreen, ErrorScreen } from "../screens";
+import { ToastProvider } from "../context/ToastContext.tsx";
+import { AuthProvider } from "../context/AuthContext.tsx";
 
 
 /**
@@ -28,7 +30,9 @@ const CoreRouter = () => {
     const router = createBrowserRouter([routes]);
 
     return (
-        <RouterProvider router={router} />
+        <ToastProvider>
+            <RouterProvider router={router} />
+        </ToastProvider>
     );
 }
 

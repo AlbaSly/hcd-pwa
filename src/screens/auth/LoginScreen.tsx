@@ -11,8 +11,15 @@ import { Password } from "primereact/password";
 
 import { AuthTitles } from "../../components/auth";
 import axios from "axios";
+import { AuthService } from "../../services/AuthService";
+import { useToast } from "../../context/ToastContext";
 
 export const LoginScreen = () => {
+
+    const {
+        showMessage,
+    } = useToast();
+
     const [credentials, setCredentials] = useState({ email: "", password: "" });
 
     const updateEmail = (value: string) => setCredentials({ ...credentials, email: value });
@@ -24,10 +31,18 @@ export const LoginScreen = () => {
     const connectWithGoogle = useGoogleLogin({
         onSuccess: (tokenResponse) => {
             /**Handle response */
-            axios.get(import.meta.env.VITE_API_URL + `/google-auth/connect?access_token=${tokenResponse.access_token}&auth_method=${'login'}`).then(response => {
-                console.log(response);
+            const authService = new AuthService();
+
+            authService.connectWGoogle(tokenResponse.access_token)
+            .then(result => {
+                showMessage({
+                    detail: result,
+                    severity: 'success'
+                });
             })
-            .catch(e => console.log(e));
+            .catch(error => {
+                console.log(error);
+            });
         },
         onError: (error) => {
             /**Handle error */
@@ -50,6 +65,7 @@ export const LoginScreen = () => {
             >
                 <form autoComplete="off" >
                     <div className="flex flex-column" style={{gap: '30px'}}>
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <InputText
                                 type="text"
@@ -61,6 +77,7 @@ export const LoginScreen = () => {
                             <label htmlFor="email">Correo Electrónico</label>
                         </FloatLabel>
 
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <Password 
                                 type="password"

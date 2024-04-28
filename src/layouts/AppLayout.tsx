@@ -4,6 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { LayoutLoader } from "../components";
 import { BottomNavbar } from "../components/layout/Navbar";
 import { SidebarMenu } from "../components/layout/Sidebar";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 
 /**
@@ -36,11 +37,12 @@ const AppLayout = () => {
     )
 
     return (
-        <div className="bg-gray-100">
+        <div className="bg-gray-100 relative h-screen">
             <SidebarMenu location={location}/>
-            <div className="h-screen w-screen overflow-y-auto">
-                <Outlet />
-            </div>
+            
+            <ScrollPanel id="app-scroll-panel">
+                <Outlet />  
+            </ScrollPanel>
 
             <BottomNavbar location={location} />
         </div>

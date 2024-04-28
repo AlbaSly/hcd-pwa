@@ -2,6 +2,8 @@ import { RouteObject} from "react-router-dom";
 
 import AppLayout from "../layouts/AppLayout.tsx";
 import { CategoriesScreen, HomeScreen, MyProfileScreen, StatsScreen, TransactionsScreen } from "../screens/app";
+import { AppProvider } from "../context/AppContext.tsx";
+import { AuthProvider } from "../context/AuthContext.tsx";
 
 
 /**
@@ -9,7 +11,13 @@ import { CategoriesScreen, HomeScreen, MyProfileScreen, StatsScreen, Transaction
  */
 export const AppRoutes: RouteObject = {
     path: '/app',
-    element: <AppLayout />,
+    element: (
+        <AuthProvider>
+            <AppProvider>
+                <AppLayout />
+            </AppProvider>
+        </AuthProvider>
+    ),
     children: [
         /**
          * APP PAGES

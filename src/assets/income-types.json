@@ -1,0 +1,27 @@
+[
+    {
+        "id": "b8b1e7cf-5f37-4f9e-8eb7-17d261b75c4e",
+        "name": "Salario",
+        "hexColor": "#77dd77"
+    },
+    {
+        "id": "0a1a8d7a-6d4a-448c-95f5-3b56ab89d4bb",
+        "name": "Bono",
+        "hexColor": "#ffb6c1"
+    },
+    {
+        "id": "ea17cf07-5c4c-486b-89d8-8f0bc5a68dcf",
+        "name": "Comisiones",
+        "hexColor": "#ffec8b"
+    },
+    {
+        "id": "daae41e9-7344-4862-848d-2cfed9fd5fc3",
+        "name": "Ingresos por alquiler",
+        "hexColor": "#b19cd9"
+    },
+    {
+        "id": "c2f8db0c-9a35-42b8-b16b-8d7b4e2262b0",
+        "name": "Dividendos",
+        "hexColor": "#add8e6"
+    }
+]

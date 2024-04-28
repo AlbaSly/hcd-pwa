@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { Location } from "react-router-dom";
 
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
 import { Toolbar } from "primereact/toolbar";
 
-import { getSortedNavbarItems, INavbarItem, navbarItems } from "../../../constants/navbarItems";
-import './SidebarMenu.scss';
+import { getSortedNavbarItems, INavbarItem } from "../../../constants/navbarItems";
 import SidebarMenuItem from "./SidebarMenuItem";
-import { Location } from "react-router-dom";
+
+import './SidebarMenu.scss';
 
 type SidebarMenuProps = {
     location: Location<any>;
@@ -15,10 +16,10 @@ type SidebarMenuProps = {
 export const SidebarMenu = (props: SidebarMenuProps) => {
     const { location } = props;
 
-    const [showing, setShowing] = useState<boolean>(false);
-    const [items, setitems] = useState<INavbarItem[]>([]);
+    const [ showing, setShowing ] = useState<boolean>(false);
+    const [ items, setitems ] = useState<INavbarItem[]>([]);
 
-    const [currentNavbarItem, setCurrentNavbarItem] = useState<INavbarItem>();
+    const [ currentNavbarItem, setCurrentNavbarItem ] = useState<INavbarItem>();
 
     useEffect(() => {
         const loadItems = () => {
@@ -52,12 +53,14 @@ export const SidebarMenu = (props: SidebarMenuProps) => {
     );
 
     const currentPageName = (): JSX.Element => (
-        <h2 className="font-bold">{currentNavbarItem?.label}</h2>
+        <h2 className="font-bold text-gray-600">{currentNavbarItem?.label}</h2>
     )
 
     return (
         <>
-            <Toolbar start={menuButton} end={currentPageName} className="p-2 px-4 sticky top-0"/>
+            <div className="hidden lg:block w-full sticky top-0 z-5">
+                <Toolbar start={menuButton} end={currentPageName} className="p-2 px-4"/>
+            </div>
             <Sidebar onHide={hide} visible={showing} header={<h2 className="font-bold block w-full text-center">Menú</h2>}>
                 <div className="h-full flex flex-col gap-2 ">
                 {

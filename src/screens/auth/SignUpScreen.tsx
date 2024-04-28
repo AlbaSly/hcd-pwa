@@ -9,8 +9,15 @@ import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FloatLabel } from "primereact/floatlabel";
 import axios from "axios";
+import { AuthService } from "../../services/AuthService";
+import { useToast } from "../../context/ToastContext";
 
 export const SignUpScreen = () => {
+
+    const {
+        showMessage,
+    } = useToast();
+
     const [userFormData, setUserFormData] = useState({
         name: "",
         lastName: "",
@@ -27,11 +34,18 @@ export const SignUpScreen = () => {
 
     const connectWithGoogle = useGoogleLogin({
         onSuccess: (tokenResponse) => {
+            const authService = new AuthService();
             /**Handle response */
-            axios.get(import.meta.env.VITE_API_URL + `/google-auth/connect?access_token=${tokenResponse.access_token}&auth_method=${'signup'}`).then(response => {
-                console.log(response);
+            authService.connectWGoogle(tokenResponse.access_token)
+            .then(result => {
+                showMessage({
+                    detail: result,
+                    severity: 'success'
+                });
             })
-            .catch(e => console.log(e));
+            .catch(error => {
+                console.log(error);
+            });
         },
         onError: (error) => {
             /**Handle error */

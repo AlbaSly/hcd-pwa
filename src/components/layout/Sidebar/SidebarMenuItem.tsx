@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { INavbarItem } from "../../../constants/navbarItems";
 import { Location, useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
@@ -36,7 +36,7 @@ const SidebarMenuItem = (props: SidebarMenuItemProps) => {
             icon={item.icon}
             raised={isSamePath}
             text={!isSamePath}
-            className="flex gap-2 font-medium bg-no shadow-2"
+            className="flex gap-2 font-medium bg-no"
         >
             {item.label}
         </Button>

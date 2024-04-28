@@ -1,0 +1,2 @@
+export const MAX_DECIMAL_LENGTH = 8;
+export const MAX_ZEROS_LENGTH_AFTER_INTEGER = 2;
