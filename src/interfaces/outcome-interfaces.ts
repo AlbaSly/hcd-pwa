@@ -7,7 +7,7 @@ export interface Outcome {
     title: string;
     description?: string;
     datetime: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export interface CreateOutcome {

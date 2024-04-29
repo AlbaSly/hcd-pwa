@@ -8,7 +8,7 @@ export interface Account {
     currency: Currency;
     amount: number;
     hexColor: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 

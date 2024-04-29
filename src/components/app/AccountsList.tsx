@@ -6,13 +6,26 @@ import { Account } from '../../interfaces';
 import tinycolor from 'tinycolor2';
 import { FormatUtils } from '../../utils/format-utils';
 import { useApp } from '../../context/AppContext';
+import { useAccounts } from '../../hooks/useAccounts';
+import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+import { useToast } from '../../context/ToastContext';
 
 
 export default function AccountsList() {
 
     const {
-        accounts
+        accounts,
+        setAccounts,
     } = useApp();
+
+    const {
+        showMessage,
+    } = useToast();
+
+    const {
+        deleteAccount,
+        getAccounts,
+    } = useAccounts();
 
     const responsiveOptions: CarouselResponsiveOption[] = [
         {
@@ -37,6 +50,27 @@ export default function AccountsList() {
         }
     ];
 
+    const deleteThis = async (id: string) => {
+        confirmDialog({
+            header: 'Eliminar Cuenta',
+            message: '¿Está seguro de eliminar esta cuenta? Todos los movimientos relacionados a ella se perderán.',
+            icon: 'pi pi-info-circle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            accept: async () => {
+                await deleteAccount(id);
+                const list = await getAccounts();
+                setAccounts(list);
+            },
+            reject: () => {
+                showMessage({
+                    detail: 'Operación cancelada.',
+                    severity: 'error'
+                });
+            }
+        })
+    }
+
     
     const accountTemplate = (account: Account) => {
         return (
@@ -59,7 +93,7 @@ export default function AccountsList() {
                             <i className="pi pi-wallet text-xl" style={{color: "#"+tinycolor('#'+account.hexColor).darken(50).toHex().toString()}}></i>
                         </div>
                         <Button severity='info' icon="pi pi-pen-to-square" text raised style={{height: '40px', width: '40px'}}/>
-                        <Button severity='danger' icon="pi pi-trash" text raised style={{height: '40px', width: '40px'}}/>
+                        <Button onClick={() => deleteThis(account.id)} severity='danger' icon="pi pi-trash" text raised style={{height: '40px', width: '40px'}}/>
                     </div>
                 </div>
                 <span className="text-yellow-400 font-medium">0 {' '}</span>
@@ -69,9 +103,12 @@ export default function AccountsList() {
     }
     
     return (
+        <>
+        <ConfirmDialog />
         <div className="card">
             <Carousel value={accounts} numVisible={3} numScroll={1} responsiveOptions={responsiveOptions} itemTemplate={accountTemplate} />
         </div>
+        </>
     )
 }
         

@@ -7,7 +7,7 @@ export interface Income {
     title: string;
     description?: string;
     datetime: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export interface CreateIncome {

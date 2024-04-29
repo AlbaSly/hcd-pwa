@@ -10,10 +10,9 @@ import { CurrencySelector } from "../selectors/CurrencySelector";
 import { AccountColorSelector } from "../selectors/AccountColorSelector";
 import { AccountPeriodicitySelector } from "../selectors/AccountPeriodicitySelector";
 import { useToast } from "../../../context/ToastContext";
-import { AccountsService } from "../../../services/AccountsService";
-import { AuthService } from "../../../services/AuthService";
 import { useApp } from "../../../context/AppContext";
 import { MAX_DECIMAL_LENGTH } from "../../../constants/app-constants";
+import { useAccounts } from "../../../hooks/useAccounts";
 
 export const CreateAccountSection = () => {
     
@@ -24,11 +23,12 @@ export const CreateAccountSection = () => {
         loadAccounts,
     } = useApp();
 
-    const { showMessage } = useToast();
-    const dialogsPosition = "center";
+    const {
+        createAccount,
+        generateName,
+    } = useAccounts();
 
-    const authService = new AuthService();
-    const accountsService = new AccountsService();
+    const dialogsPosition = "center";
     
     const [ accountName, setAccountName ] = useState<string>(defaultAccountValue.name);
     const [ accountPeriodicity, setAccountPeriodicity ] = useState<Periodicity>(defaultAccountValue.periodicity);
@@ -39,7 +39,7 @@ export const CreateAccountSection = () => {
     const updateamount = (value: number) => setamount(value);
     const updateAccountName = (value: string) => setAccountName(value);
 
-    const create = () => {
+    const create = async () => {
 
         const account: CreateAccount = {
             name: accountName,
@@ -49,20 +49,14 @@ export const CreateAccountSection = () => {
             hexColor: accountColor,
         }
 
-        accountsService.create(account);
-        
+        await createAccount(account);
         loadAccounts();
-        closeDialogs();
 
-        showMessage({
-            severity: 'success',
-            detail: 'Cuenta creada correctamente.',
-            life: 2000,
-        });
+        closeDialogs();
     }
 
     function resetStates() {
-        setAccountName(AccountsService.genAccountName());
+        setAccountName(generateName());
         setAccountPeriodicity(defaultAccountValue.periodicity);
         setamount(defaultAccountValue.amount);
         setAccountColor(defaultAccountValue.hexColor);

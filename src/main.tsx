@@ -19,9 +19,9 @@ import './scss/index.scss';
 import App from './App.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+//   <React.StrictMode>
       <PrimeReactProvider>
         <App />
       </PrimeReactProvider>
-  </React.StrictMode>,
+//   </React.StrictMode>,
 )

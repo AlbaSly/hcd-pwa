@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Account, CreateAccount, CreateIncome, Currency, IncomeType, OutcomeType, Periodicity } from "../interfaces";
-import { AccountsService } from "../services/AccountsService";
 import { PeriodicitiesService } from "../services/PeriodicitiesService";
 import { CurrenciesService } from "../services/CurrenciesService";
 import { IncomeAndOutComesService } from "../services/IncomeAndOutcomesService";
+import { useAccounts } from "../hooks/useAccounts";
 
 interface AppContextState {
     defaultAccountValue: CreateAccount;
@@ -30,19 +30,26 @@ const AppContext = createContext<AppContextState | null>(null);
 
 export const AppProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
+    const {
+        getAccounts,
+        generateName: generateAccountName,
+    } = useAccounts();
+
     const [ accounts, setAccounts ] = useState<Account[]>([]);
     const [ periodicities, setPeriodicities ] = useState<Periodicity[]>([]);
     const [ currencies, setCurrencies ] = useState<Currency[]>([]);
     const [ incomeTypes, setIncomeTypes ] = useState<IncomeType[]>([]);
     const [ outcomeTypes, setOutcomeTypes ] = useState<OutcomeType[]>([]);
 
-    const accService = new AccountsService();
     const periodicitesService = new PeriodicitiesService();
     const currenciesService = new CurrenciesService();
     const inAndOutcomesService = new IncomeAndOutComesService();
 
 
-    const loadAccounts = () => setAccounts(accService.getCatalog());
+    const loadAccounts = async () => {
+        const accounts = await getAccounts();
+        setAccounts(accounts);
+    }
     const loadPeriodicities = () => setPeriodicities(periodicitesService.getCatalog());
     const loadCurrencies = () => setCurrencies(currenciesService.getCatalog());
     const loadIncomeTypes = () => setIncomeTypes(inAndOutcomesService.getIncomeTypesCatalog());
@@ -50,7 +57,7 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({children}) => {
 
 
     const [ defaultAccountValue ] = useState<CreateAccount>({
-        name: AccountsService.genAccountName(),
+        name: generateAccountName(),
         periodicity: periodicitesService.getDefaultValue(),
         currency: currenciesService.getDefaultValue(),
         amount: 0,
