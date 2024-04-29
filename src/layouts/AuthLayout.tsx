@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { GoogleAuthService } from "../services";
-import { LayoutLoader, ScreenContainer } from "../components";
+import { LayoutLoader } from "../components";
+import { useAuth } from "../context/AuthContext";
+import { AuthService } from "../services/AuthService";
 
 /**
  * Layout para renderizar las rutas relacionadas al módulo Auth
  * @returns JSX.Element
  */
 const AuthLayout = () => {
+
     const [loading, setLoading] = useState(true);
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     const clientId = GoogleAuthService.getClientId();
 
@@ -27,6 +31,9 @@ const AuthLayout = () => {
     }, []);
 
     useEffect(() => {
+        const token = new AuthService().getLocalSessionToken();
+        if (token) return navigate('/app');
+
         scrollTo({ top: 0 });
     }, [location]);
 

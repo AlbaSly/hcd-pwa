@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) 
     const navigate = useNavigate();
 
     const [ inAuthProcess, setInAuthProcess ] = useState<boolean>(true);
-    const [ sessionToken ] = useState<string | null>(authService.getLocalSessionToken());
+    const [ sessionToken, setSessionToken ] = useState<string | null>(authService.getLocalSessionToken());
     const [ userInfo, setUserInfo ] = useState<UserInfo | null>(null);
     const [ isAuthenticated, setIsAuthenticated ] = useState<boolean>(false);
 
@@ -50,14 +50,22 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) 
 
             showMessage({severity: 'info', detail: `Bienvenido, ${result.data.data.name}`})
         } catch (error) {
+            setIsAuthenticated(false);
             authService.removeLocalSessionToken();
+            setSessionToken(null);
+            setUserInfo(null);
         } finally {
             setInAuthProcess(false);
         }
     }
 
     const logout = async () => {
+        setIsAuthenticated(false);
         authService.removeLocalSessionToken();
+        setIsAuthenticated(false);
+        setSessionToken(null);
+        setUserInfo(null);
+
         navigate('/');
 
         showMessage({severity: 'warn', detail: 'Sesión Cerrada.'});

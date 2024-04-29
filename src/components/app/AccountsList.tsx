@@ -105,9 +105,17 @@ export default function AccountsList() {
     return (
         <>
         <ConfirmDialog />
-        <div className="card">
-            <Carousel value={accounts} numVisible={3} numScroll={1} responsiveOptions={responsiveOptions} itemTemplate={accountTemplate} />
-        </div>
+        {
+            accounts.length 
+            ? (
+                <div className="card">
+                    <Carousel value={accounts} numVisible={3} numScroll={1} responsiveOptions={responsiveOptions} itemTemplate={accountTemplate} />
+                </div>
+            )
+            : (
+                <h3 className='my-8'>Sin cuentas.</h3>
+            )
+        }
         </>
     )
 }

@@ -5,10 +5,10 @@ import { AuthTitles } from "../../components/auth";
 import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FloatLabel } from "primereact/floatlabel";
-import axios from "axios";
+
 import { AuthService } from "../../services/AuthService";
 import { useToast } from "../../context/ToastContext";
 
@@ -32,6 +32,8 @@ export const SignUpScreen = () => {
     const updatePassword = (value: string) => setUserFormData({ ...userFormData, password: value });
     const updateRepeatedPassword = (value: string) => setUserFormData({ ...userFormData, repeatedPassword: value });
 
+    const navigate = useNavigate();
+
     const connectWithGoogle = useGoogleLogin({
         onSuccess: (tokenResponse) => {
             const authService = new AuthService();
@@ -42,6 +44,7 @@ export const SignUpScreen = () => {
                     detail: result,
                     severity: 'success'
                 });
+                navigate('/app');
             })
             .catch(error => {
                 console.log(error);

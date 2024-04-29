@@ -10,7 +10,6 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 
 import { AuthTitles } from "../../components/auth";
-import axios from "axios";
 import { AuthService } from "../../services/AuthService";
 import { useToast } from "../../context/ToastContext";
 
@@ -39,6 +38,7 @@ export const LoginScreen = () => {
                     detail: result,
                     severity: 'success'
                 });
+                navigate('/app');
             })
             .catch(error => {
                 console.log(error);
