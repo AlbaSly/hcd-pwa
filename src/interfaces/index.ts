@@ -1,7 +1,6 @@
 export * from "./auth-interfaces";
 export * from "./account-interfaces";
-export * from "./income-interfaces";
-export * from "./outcome-interfaces";
+export * from "./transactions-interfaces";
 
 
 export interface UserInfo {
@@ -29,18 +28,5 @@ export interface Periodicity {
     name: string;
     days: number;
 }
-
-export interface OutcomeType {
-    id: string;
-    name: string;
-    hexColor: string;
-}
-
-export interface IncomeType {
-    id: string;
-    name: string;
-    hexColor: string;
-}
-
 
 export type TransactionTypes = "income" | "outcome";

@@ -14,7 +14,7 @@ export const AccountPeriodicitySelector = (props: AccountPeriodicitySelectorProp
     } = props;
 
     return (
-        <div className="mx-auto flex justify-content-center gap-2 ">
+        <div className="mx-auto grid grid-cols-1 justify-content-center gap-2 ">
             {
                 periodicities.map((periodicity, index) => (
                     <Button 

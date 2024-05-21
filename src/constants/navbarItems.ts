@@ -4,7 +4,7 @@
 export const navbarItems: INavbarItem[] = [
     {
         icon: 'pi pi-credit-card',
-        label: 'Transacciones',
+        label: 'Movimientos',
         goTo: '/app/transactions',
     },
     {

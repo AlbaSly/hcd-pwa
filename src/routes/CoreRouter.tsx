@@ -5,8 +5,6 @@ import {AppRoutes} from "./AppRoutes.tsx";
 
 import { IndexScreen, ErrorScreen } from "../screens";
 import { ToastProvider } from "../context/ToastContext.tsx";
-import { AuthProvider } from "../context/AuthContext.tsx";
-
 
 /**
  * Router para gestionar diferentes rutas separadas

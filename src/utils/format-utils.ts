@@ -1,13 +1,10 @@
 import { MAX_DECIMAL_LENGTH } from "../constants/app-constants";
-import { Account } from "../interfaces";
 
 export namespace FormatUtils {
 
-    export const formatToMoney = (account: Account): string => {
-        if (account.currency.decimal_digits) {
-            return account.amount.toFixed(account.currency.decimal_digits);
-        }
+    export const formatMoney = (amount: number, decimal_digits?: number): string => {
+        if (decimal_digits) return amount.toFixed(decimal_digits);
 
-        return account.amount.toFixed(MAX_DECIMAL_LENGTH);
+        return amount.toFixed(MAX_DECIMAL_LENGTH);
     }
 }

@@ -4,11 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { Dialog } from "primereact/dialog";
+
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
-
-import OTPInput from "react-otp-input";
 
 import { AuthTitles } from "../../components/auth";
 
@@ -51,6 +49,7 @@ export const PasswordRecoveryScreen = () => {
             >
                 <form onSubmit={handleSubmit} autoComplete="off">
                     <div className="flex flex-column" style={{ gap: "30px" }}>
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <InputText
                                 type="text"

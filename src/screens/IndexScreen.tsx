@@ -1,8 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services/AuthService";
+import { useEffect } from "react";
 
 export const IndexScreen = () => {
 
+    const authService = new AuthService();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authService.getLocalSessionToken()) return navigate('/app');
+    });
     
     const navigateToAuth = () => {
         navigate('/auth/login');

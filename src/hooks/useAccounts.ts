@@ -1,14 +1,9 @@
-import { useApp } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext"
 import { useToast } from "../context/ToastContext";
-import { TimestampHelpers } from "../helpers/timestamp-helpers";
-import { UUIDHelpers } from "../helpers/uuid-helpers";
 import { Account, CreateAccount } from "../interfaces"
-import { initializeDB, Stores } from "../lib/db";
+import { AccountsService } from "../services/AccountsService";
 
 export const useAccounts = () => {
-
-    const COUNTER_NAME = 'hcd_accounts-counter';
 
     const {
         userInfo,
@@ -18,90 +13,78 @@ export const useAccounts = () => {
         showMessage,
     } = useToast();
 
+    const accountsService = new AccountsService();
 
     const createAccount = async (data: CreateAccount): Promise<void> => {
-
-        const newAccount: Account = {
-            id: UUIDHelpers.generate(),
-            userId: userInfo.id,
-            ...data,
-            createdAt: TimestampHelpers.generate()
-        }
-
         try {
-            const db = await initializeDB();
-            const tx = db.transaction(Stores.Accounts, 'readwrite');
-            const store = tx.objectStore(Stores.Accounts);
-            await store.add(newAccount);
-            await tx.done;
+            const result = await accountsService.createAccount(data, userInfo.id);
 
-            updateCount();
-            
             showMessage({
                 severity: 'success',
-                detail: 'Cuenta creada correctamente.'
+                detail: result
             });
         } catch (error) {
-            console.error(error);
             showMessage({
                 severity: 'error',
-                detail: 'Hubo un error.'
+                detail: <string>error
             });
         }
     }
 
     const getAccounts = async (): Promise<Account[]> => {
-        const db = await initializeDB();
-        const tx = db.transaction(Stores.Accounts, 'readonly');
-        const store = tx.objectStore(Stores.Accounts);
-        const index = store.index("userIdIndex");
-        const accounts = await index.getAll(userInfo.id);
+        try {
+            const result = await accountsService.getAccounts(userInfo.id);
 
-        await tx.done;
-        return accounts;
+            return result;
+        } catch (error) {
+            showMessage({
+                severity: 'error',
+                detail: <string>error
+            });
+            return [];
+        }
+    }
+
+    const editAccount = async (id: string, data: Partial<Account>): Promise<void> => {
+        try {
+            const result = await accountsService.editAccount(id, data);
+    
+            showMessage({
+                severity: 'success',
+                detail: result
+            });
+        } catch (error) {
+            showMessage({
+                severity: 'error',
+                detail: <string>error
+            });
+        }
     }
 
     const deleteAccount = async (id: string) => {
         try {
-            const db = await initializeDB();
-            const tx = db.transaction(Stores.Accounts, 'readwrite');
-            const store = tx.objectStore(Stores.Accounts);
-    
-            await store.delete(id);
-            await tx.done;
+            const result = await accountsService.deleteAccount(id);
 
             showMessage({
                 severity: 'warn',
-                detail: 'Cuenta eliminada correctamente.'
-            })
+                detail: result
+            });
         } catch (error) {
-            console.error(error);
             showMessage({
                 severity: 'error',
-                detail: 'Hubo un error.'
+                detail: <string>error
             });
         }
     }
 
     function generateName() {
-        return `Cuenta #${getCount() + 1}`;
-    }
-
-    function getCount() {
-        const currentCount = localStorage.getItem(COUNTER_NAME);
-        
-        return currentCount ? Number.parseInt(currentCount) : 0;
-    }
-
-    function updateCount() {
-        const current = getCount() + 1;
-
-        localStorage.setItem(COUNTER_NAME, current.toString());
+        return accountsService.generateName();
     }
 
     return {
         createAccount,
         getAccounts,
+        editAccount,
         deleteAccount,
         generateName,
     }

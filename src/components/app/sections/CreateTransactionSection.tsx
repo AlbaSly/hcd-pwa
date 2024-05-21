@@ -7,18 +7,20 @@ import { useToast } from "../../../context/ToastContext";
 import { AccountSelector } from "../selectors/AccountSelector";
 import {
     Account,
-    IncomeType,
-    OutcomeType,
+    CreateTransaction,
+    Transaction,
+    TransactionCategory,
     TransactionTypes,
 } from "../../../interfaces";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
-import { IncomeTypeSelector } from "../selectors/IncomeTypeSelector";
 import { Calendar } from "primereact/calendar";
 import { addLocale, locale } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
 import { MAX_DECIMAL_LENGTH } from "../../../constants/app-constants";
 import { DOMUtils } from "../../../utils/dom-utils";
+import { TransactionCategorySelector } from "../selectors/TransactionCategorySelector";
+import { useTransactions } from "../../../hooks/useTransactions";
 
 locale("es");
 addLocale("es", {
@@ -66,45 +68,115 @@ addLocale("es", {
     clear: "Limpiar",
 });
 
-export const CreateTransactionSection = () => {
-    const dialogsPosition = "center";
 
-    const { accounts, incomeTypes, outcomeTypes } = useApp();
+type CreateTransactionSectionProps = {
+    editionMode?: boolean;
+    transactionToEdit?: Transaction;
 
+    showFromExternalComponent?: boolean;
+    editionFinishedHandler?: () => void;
+}
+export const CreateTransactionSection = (props: CreateTransactionSectionProps) => {
+
+    const { accounts, transactionCategories: categories, loadTransactions, loadAccounts } = useApp();
+    const { createTransaction, editTransaction } = useTransactions();
     const { showMessage } = useToast();
+    
+    const {
+        editionMode,
+        transactionToEdit,
+        showFromExternalComponent,
+        editionFinishedHandler
+    } = props;
 
-    const [dialogsTitle, setDialogsTitle] = useState("Nuevo movimiento");
+    const dialogsPosition = "center";
+    const [ headerTitle , setHeaderTitle] = useState(editionMode ? 'Editar' : 'Nuevo movimiento');
 
-    const [transactionType, setTransactionType] = useState<TransactionTypes>();
-    const [accountSelected, setAccountSelected] = useState<Account>(
-        accounts[0]
-    );
+    const [ transactionType, setTransactionType ] = useState<TransactionTypes | undefined>(transactionToEdit ? transactionToEdit.type : undefined);
+    const [ accountSelected, setAccountSelected ] = useState<Account | undefined>(transactionToEdit ? transactionToEdit.account : accounts[0]);
 
-    const [incomeType, setIncomeType] = useState<IncomeType>(incomeTypes[0]);
-    const [outcomeType, setOutcomeType] = useState<OutcomeType>(
-        outcomeTypes[0]
-    );
+    const [ transactionCategories, setTransactionCategories ] = useState<TransactionCategory[]>([]);
+    const [ transactionCategory, setTransactionCategory ] = useState<TransactionCategory>();
 
-    const [transactionAmount, setTransactionAmount] = useState<number>(0);
+    const [ transactionAmount, setTransactionAmount ] = useState<number>(transactionToEdit ? transactionToEdit.amount : 0);
 
-    const [transactionTitle, setTransactionTitle] =
-        useState<string>("Nuevo movimiento");
-    const [transactionDescription, setTransactionDescription] =
-        useState<string>();
-    const [transactionDatetime, setTransactionDatetime] = useState<string>();
+    const [ transactionTitle, setTransactionTitle ] = useState<string>(transactionToEdit ? transactionToEdit.title : "Nuevo movimiento");
 
-    const [transactionDate, setTransactionDate] = useState(new Date());
-    const [transactionTime, setTransactionTime] = useState(new Date());
+    const [ transactionDate, setTransactionDate ] = useState(transactionToEdit ? transactionToEdit.datetime : new Date());
+    const [ transactionTime, setTransactionTime ] = useState(transactionToEdit ? transactionToEdit.datetime : new Date());
 
-    const [showSection1, setShowSection1] = useState(false);
-    const [showSection2, setShowSection2] = useState(false);
-    const [showSection3, setShowSection3] = useState(false);
-    const [showSection4, setShowSection4] = useState(false);
-    const [showSection5, setShowSection5] = useState(false);
+    const [ showSection1, setShowSection1 ] = useState(false);
+    const [ showSection2, setShowSection2 ] = useState(false);
+    const [ showSection3, setShowSection3 ] = useState(false);
 
     useEffect(() => {
-        if (accounts.length) setAccountSelected(accounts[0]);
+        const acc = editionMode ? accounts.find(acc => transactionToEdit?.account.id === acc.id) : accounts[0];
+        setAccountSelected(acc);
+
+        setTransactionCategories(categories);
     }, []);
+
+    useEffect(() => {
+        const _filtered = categories.filter(cat => cat.type === transactionType);
+
+        setTransactionCategories(_filtered);
+
+        const cat = editionMode ? (transactionToEdit?.type === transactionType ? transactionToEdit?.category : _filtered[0]) : _filtered[0];
+        setTransactionCategory(cat);
+    }, [transactionType]);
+
+    useEffect(() => {
+        if (showFromExternalComponent) setShowSection2(true);
+    }, [showFromExternalComponent]);
+
+    const create = async () => {
+
+        if (transactionAmount === 0) {
+            go_3_to_2();
+            showMessage({
+                severity: 'warn',
+                detail: 'Establezca una cantidad primero!'
+            });
+
+            return;
+        }
+
+        if (editionMode) {
+            const transaction: CreateTransaction = {
+                account: accountSelected!,
+                type: transactionType!,
+                category: transactionCategory!,
+                title: transactionTitle,
+                amount: transactionAmount,
+                date: transactionDate,
+                time: transactionTime
+            }
+
+            await editTransaction(transactionToEdit!.id, transaction);
+
+            loadAccounts();
+            loadTransactions();
+
+            closeDialogs();
+            return;
+        }
+
+        const transaction: CreateTransaction = {
+            account: accountSelected!,
+            type: transactionType!,
+            category: transactionCategory!,
+            title: transactionTitle,
+            amount: transactionAmount,
+            date: transactionDate,
+            time: transactionTime
+        }
+
+        await createTransaction(transaction);
+        loadTransactions();
+        loadAccounts();
+
+        closeDialogs();
+    }
 
     const start = () => {
         if (!accounts.length)
@@ -114,6 +186,12 @@ export const CreateTransactionSection = () => {
             });
 
         DOMUtils.addBodyOverflowClass();
+
+        if (!editionMode) {
+            setAccountSelected(accounts[0]);
+            setTransactionDate(new Date());
+            setTransactionTime(new Date());
+        }
         setShowSection1(true);
     };
 
@@ -124,19 +202,25 @@ export const CreateTransactionSection = () => {
         setShowSection2(true);
 
         setTimeout(() => {
-            if (transactionType === "income") setDialogsTitle("Nuevo Ingreso");
-            if (transactionType === "outcome") setDialogsTitle("Nuevo Egreso");
+
+            let title = "";
+
+            if (editionMode) {
+                title += "Editar ";
+            } else {
+                title += "Nuevo ";
+            }
+
+            if (transactionTitle === "income") title += "Ingreso";
+            if (transactionTitle === "outcome") title += "Egreso";
+
+            setHeaderTitle(title);
         }, 50);
     };
 
     const go_2_to_3 = () => {
         setShowSection2(false);
         setShowSection3(true);
-    };
-
-    const go_3_to_4 = () => {
-        setShowSection3(false);
-        setShowSection4(true);
     };
 
     const go_3_to_2 = () => {
@@ -149,7 +233,7 @@ export const CreateTransactionSection = () => {
         setShowSection1(true);
 
         setTimeout(() => {
-            setDialogsTitle("Nuevo Movimiento");
+            setHeaderTitle("Nuevo Movimiento");
         }, 50);
     };
 
@@ -169,8 +253,8 @@ export const CreateTransactionSection = () => {
             <Button onClick={() => go_3_to_2()} text>
                 Atrás
             </Button>
-            <Button onClick={() => go_3_to_4()} raised>
-                Siguiente
+            <Button onClick={create} raised>
+                Hecho
             </Button>
         </div>
     );
@@ -183,22 +267,40 @@ export const CreateTransactionSection = () => {
         setShowSection3(false);
 
         setTimeout(() => {
-            setDialogsTitle("Nuevo Movimiento");
+            if (editionFinishedHandler) editionFinishedHandler();
+            
+            setHeaderTitle("Nuevo Movimiento");
+
+            resetStates();
         }, 50);
+    }
+
+    function resetStates() {
+        setTransactionType(undefined);
+        setAccountSelected(accounts[0]);
+        setTransactionCategory(transactionCategories[0]);
+        setTransactionAmount(0);
+        setTransactionTitle("Nuevo movimiento");
+        setTransactionDate(new Date());
+        setTransactionTime(new Date());
     }
 
     return (
         <>
-            <Button
-                onClick={() => start()}
-                className="transaction-button"
-                icon="pi pi-plus"
-                rounded
-                raised
-            />
+            {
+                !editionMode && 
+
+                <Button
+                    onClick={() => start()}
+                    className="transaction-button"
+                    icon="pi pi-plus"
+                    rounded
+                    raised
+                />
+            }
 
             <Dialog
-                header={dialogsTitle}
+                header={headerTitle}
                 visible={showSection1}
                 onHide={closeDialogs}
                 draggable={false}
@@ -232,7 +334,7 @@ export const CreateTransactionSection = () => {
             </Dialog>
 
             <Dialog
-                header={dialogsTitle}
+                header={headerTitle}
                 visible={showSection2}
                 onHide={closeDialogs}
                 draggable={false}
@@ -279,16 +381,21 @@ export const CreateTransactionSection = () => {
                     <br />
                     <br />
 
-                    <IncomeTypeSelector
+                    {/* <IncomeTypeSelector
                         value={incomeType}
                         incomeTypes={incomeTypes}
                         handleSelection={setIncomeType}
+                    /> */}
+                    <TransactionCategorySelector 
+                        value={transactionCategory}
+                        options={transactionCategories}
+                        handleSelection={setTransactionCategory}
                     />
                 </section>
             </Dialog>
 
             <Dialog
-                header={dialogsTitle}
+                header={headerTitle}
                 visible={showSection3}
                 onHide={closeDialogs}
                 draggable={false}
@@ -358,20 +465,9 @@ export const CreateTransactionSection = () => {
                                 <label htmlFor="time">Hora</label>
                             </FloatLabel>
                         </div>
-                    </section>
 
-                    {/* @ts-ignore */}
-                    {/* <FloatLabel>
-                        <InputTextarea
-                            id="description"
-                            value={transactionDescription}
-                            onChange={(e) => setTransactionDescription(e.target.value)}
-                            rows={5}
-                            autoResize
-                            className="w-full"
-                        />
-                        <label htmlFor="description">Descripción del movimiento (opcional)</label>
-                    </FloatLabel> */}
+                        <p className="text-gray-500 md:text-center"><small>Nota: Por defecto se cargará la fecha de hoy.</small></p>
+                    </section>
                 </section>
             </Dialog>
         </>

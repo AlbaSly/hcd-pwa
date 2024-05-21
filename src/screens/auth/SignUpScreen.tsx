@@ -47,6 +47,10 @@ export const SignUpScreen = () => {
                 navigate('/app');
             })
             .catch(error => {
+                showMessage({
+                    severity: 'error',
+                    detail: (typeof error == "string" ? error : 'Hubo un error')
+                });
                 console.log(error);
             });
         },
@@ -86,6 +90,7 @@ export const SignUpScreen = () => {
                     <hr className="my-4 text-gray-200"/>
 
                     <div className="flex flex-column" style={{gap: '30px'}}>
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <InputText
                                 type="text"
@@ -97,6 +102,7 @@ export const SignUpScreen = () => {
                             <label htmlFor="name">Nombre(s)</label>
                         </FloatLabel>
 
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <InputText
                                 type="text"
@@ -108,6 +114,7 @@ export const SignUpScreen = () => {
                             <label htmlFor="lastname">Apellido(s)</label>
                         </FloatLabel>
 
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <InputText
                                 type="email"
@@ -119,6 +126,7 @@ export const SignUpScreen = () => {
                             <label htmlFor="email">Correo Electrónico</label>
                         </FloatLabel>
 
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <Password 
                                 type="password"
@@ -133,6 +141,7 @@ export const SignUpScreen = () => {
                             <label htmlFor="password">Contraseña</label>
                         </FloatLabel>
 
+                        {/* @ts-ignore */}
                         <FloatLabel>
                             <Password 
                                 type="password"

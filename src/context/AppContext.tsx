@@ -1,13 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Account, CreateAccount, CreateIncome, Currency, IncomeType, OutcomeType, Periodicity } from "../interfaces";
+import { Account, CreateAccount, Currency, Periodicity, Transaction, TransactionCategory } from "../interfaces";
 import { PeriodicitiesService } from "../services/PeriodicitiesService";
 import { CurrenciesService } from "../services/CurrenciesService";
-import { IncomeAndOutComesService } from "../services/IncomeAndOutcomesService";
+
 import { useAccounts } from "../hooks/useAccounts";
+import { TransactionCategoriesService } from "../services/TransactionCategoriesService";
+import { useTransactions } from "../hooks/useTransactions";
+import { TransactionsService } from "../services/TransactionsService";
+
 
 interface AppContextState {
     defaultAccountValue: CreateAccount;
-    defaultTransactionValue: CreateIncome;
+
+    accountSelected: Account | undefined;
+    setAccountSelected: (value: Account | undefined) => void;
 
     accounts: Account[];
     setAccounts: (value: Account[]) => void;
@@ -21,8 +27,14 @@ interface AppContextState {
     setCurrencies: (value: Currency[]) => void;
     loadCurrencies: () => void;
 
-    incomeTypes: IncomeType[];
-    outcomeTypes: OutcomeType[];
+    transactionCategories: TransactionCategory[];
+    loadTransactionCategories: () => void;
+
+    transactions: Transaction[];
+    loadTransactions: (account?: Account) => void;
+
+    filteredTransactions: Transaction[];
+    updateFilteredTransactions: (accountId?: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextState | null>(null);
@@ -34,16 +46,23 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         getAccounts,
         generateName: generateAccountName,
     } = useAccounts();
+    
+    const {
+        getTransactions,
+    } = useTransactions();
 
+    const [ accountSelected, setAccountSelected ] = useState<Account>();
     const [ accounts, setAccounts ] = useState<Account[]>([]);
     const [ periodicities, setPeriodicities ] = useState<Periodicity[]>([]);
     const [ currencies, setCurrencies ] = useState<Currency[]>([]);
-    const [ incomeTypes, setIncomeTypes ] = useState<IncomeType[]>([]);
-    const [ outcomeTypes, setOutcomeTypes ] = useState<OutcomeType[]>([]);
+    const [ transactionCategories, setTransactionCategories ] = useState<TransactionCategory[]>([]);
+    const [ transactions, setTransactions ] = useState<Transaction[]>([]);
+    const [ filteredTransactions, setFilteredTransactions ] = useState<Transaction[]>([]);
 
     const periodicitesService = new PeriodicitiesService();
     const currenciesService = new CurrenciesService();
-    const inAndOutcomesService = new IncomeAndOutComesService();
+    const transactionCategoriesService = new TransactionCategoriesService();
+    const transactionsService = new TransactionsService();
 
 
     const loadAccounts = async () => {
@@ -52,37 +71,39 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     }
     const loadPeriodicities = () => setPeriodicities(periodicitesService.getCatalog());
     const loadCurrencies = () => setCurrencies(currenciesService.getCatalog());
-    const loadIncomeTypes = () => setIncomeTypes(inAndOutcomesService.getIncomeTypesCatalog());
-    const loadOutcomeTypes = () => setOutcomeTypes(inAndOutcomesService.getOutcomeTypesCatalog());
-
+    const loadTransactionCategories = () => setTransactionCategories(transactionCategoriesService.getCatalog());
+    const loadTransactions = async (account?: Account) => {
+        const transactions = await getTransactions(account ? account.id : undefined);
+        setTransactions(transactions);
+    }
+    const updateFilteredTransactions = async (accountId?: string) => {
+        if (!accountId) return setFilteredTransactions([]);
+        
+        const data = await transactionsService.getTransactions(accountId);
+        setFilteredTransactions(data);
+    }
 
     const [ defaultAccountValue ] = useState<CreateAccount>({
         name: generateAccountName(),
         periodicity: periodicitesService.getDefaultValue(),
         currency: currenciesService.getDefaultValue(),
-        amount: 0,
+        initialAmount: 0,
         hexColor: "87ceebff",
     });
 
-    const [ defaultTransactionValue ] = useState<CreateIncome>({
-        account: undefined,
-        datetime: '',
-        incomeType: inAndOutcomesService.getDefaultIncomeTypeValue(),
-        title: 'Mi ingreso',
-        description: undefined
-    });
-    
     useEffect(() => {
         loadAccounts();
         loadPeriodicities();
         loadCurrencies();
-        loadIncomeTypes();
-        loadOutcomeTypes();
+        loadTransactionCategories();
     }, []);
 
     const state: AppContextState = {
-        defaultTransactionValue,
         defaultAccountValue,
+
+        accountSelected,
+        setAccountSelected,
+
         accounts,
         setAccounts,
         loadAccounts,
@@ -95,8 +116,14 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({children}) => {
         setCurrencies,
         loadCurrencies,
         
-        incomeTypes,
-        outcomeTypes
+        transactionCategories,
+        loadTransactionCategories,
+
+        transactions,
+        loadTransactions,
+
+        filteredTransactions,
+        updateFilteredTransactions,
     }
 
     return (

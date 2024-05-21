@@ -1,9 +1,13 @@
-import { Button } from "primereact/button";
 import { AppTitle } from "../../components/app"
 
 import AccountsList from "../../components/app/AccountsList";
 import { CreateAccountSection, CreateTransactionSection } from "../../components/app/sections";
 import { useAuth } from "../../context/AuthContext";
+import { TransactionsList } from "../../components/app/TransactionsList";
+import { useApp } from "../../context/AppContext";
+import { useEffect } from "react";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 export const HomeScreen = () => {
 
@@ -11,10 +15,21 @@ export const HomeScreen = () => {
         userInfo
     } = useAuth();
 
+    const {
+        loadTransactions,
+        transactions,
+    } = useApp();
+    
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        loadTransactions();
+    }, []);
+
     return (
         <>
             <AppTitle>
-                <h1>Buenos días, <span>{userInfo.name}</span></h1>
+                <h1>Hola, <span>{userInfo.name}</span></h1>
             </AppTitle>
 
             <CreateTransactionSection />
@@ -33,34 +48,19 @@ export const HomeScreen = () => {
                 <section className="container mx-auto mb-4">
                     <h2>Reciente</h2>
 
-                    <div className="container mx-auto flex flex-col gap-3 mb-2">
+                    <TransactionsList transactions={transactions} limit={5}/>
 
-                        <div className="card p-3 bg-white border-round shadow-2">
-                            <p className="text-left m-0 text-base font-medium text-gray-500">Categoría: Comida</p>
-                            <div className="flex flex-column-reverse md:flex-row align-items-center justify-content-between my-2">
-                                <div className="flex align-items-center gap-4">
-                                    <Button icon="pi pi-pen-to-square" raised text className="text-gray-500" style={{height: '32px', width: '32px'}}/>
-                                    <p className="text-xl font-bold text-gray-600">Comida</p>
-                                </div>
-                                <div className="text-2xl font-bold text-gray-700 flex align-items-center gap-2">
-                                    <i className="pi pi-chevron-down text-red-500 font-bold text-3xl"></i>
-                                    <p>$279.79 MXN</p>
-                                </div>
-                            </div>
-                        </div>
+                    {
+                        transactions.length 
 
+                        ? (
+                            <Button onClick={() => navigate('/app/transactions')} className="block mx-auto my-4" raised>Ver más movimientos...</Button>
+                        )
 
-                        <div className="card p-3 bg-white border-round shadow-2">
-                            <p className="text-left m-0 text-base font-medium text-gray-500">Categoría: Regalos</p>
-                            <div className="flex flex-column-reverse md:flex-row  align-items-center justify-content-between my-2">
-                                <div className="flex align-items-center gap-4">
-                                    <Button icon="pi pi-pen-to-square" raised text className="text-gray-500" style={{height: '32px', width: '32px'}}/>
-                                    <p className="text-xl font-bold text-gray-600">Regalo Cumple.</p>
-                                </div>
-                                <p className="text-2xl font-bold text-gray-700"><i className="pi pi-chevron-up text-green-500 font-bold"></i> $0.0001 BTC</p>
-                            </div>
-                        </div>
-                    </div>
+                        : (
+                            <></>
+                        )
+                    }
                 </section>
             </main>
         </>

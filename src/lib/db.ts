@@ -2,24 +2,26 @@ import { openDB } from "idb"
 import { config } from "../configs"
 
 export enum Stores {
+    UserInfo = 'user_info',
+
     Accounts = 'accounts',
-    Incomes = 'incomes',
-    Outcomes = 'outcomes',
+    Transactions = 'transactions',
 
     Currencies = 'currencies',
     Periodicities = 'periodicities',
-    OutcomeTypes = 'outcome_types',
-    IncomeTypes = 'income_types',
+    TransactionCategories = 'transaction_categories',
 }
 
 export const initializeDB = async () => {
     return openDB(config.INDEXED_DB_NAME, config.INDEXEDB_DB_VERSION, {
         upgrade(db) {
+
+            db.createObjectStore(Stores.UserInfo, {keyPath: 'id'});
+
             const accountsStore = db.createObjectStore(Stores.Accounts, {keyPath: 'id'});
             accountsStore.createIndex('userIdIndex', 'userId');
 
-            db.createObjectStore(Stores.Incomes, {keyPath: 'id'});
-            db.createObjectStore(Stores.Outcomes, {keyPath: 'id'});
+            db.createObjectStore(Stores.Transactions, {keyPath: 'id'});
         }
     });
 }

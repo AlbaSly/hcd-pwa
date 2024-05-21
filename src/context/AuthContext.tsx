@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosClient } from "../interceptors/AxiosClient";
 import { useToast } from "./ToastContext";
 import { AuthProviderLoader } from "../components/auth";
+import { AxiosError } from "axios";
 
 interface AuthContextState {
     inAuthProcess: boolean;
@@ -45,13 +46,41 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({children}) 
                 }
             });
 
+            await authService.saveUserInfo(result.data.data);
             setUserInfo(result.data.data);
             setIsAuthenticated(true);
 
-            showMessage({severity: 'info', detail: `Bienvenido, ${result.data.data.name}`})
+            showMessage({severity: 'success', detail: `Bienvenido, ${result.data.data.name}`})
         } catch (error) {
-            setIsAuthenticated(false);
+
+            if (error instanceof AxiosError) {
+                /**Forcing offline mode to get userinfo data*/
+                if (error.code === "ERR_NETWORK" || error.message === "Network Error") {
+
+                    const userInfo = await authService.getUserInfo();
+
+                    if (!userInfo) {
+                        authService.removeLocalSessionToken();
+                        setIsAuthenticated(false);
+                        setSessionToken(null);
+                        setUserInfo(null);
+                        return;
+                    }
+
+                    setIsAuthenticated(true);
+                    setUserInfo(userInfo);
+                    showMessage({
+                        severity: 'info',
+                        detail: 'Cargando sesión local.'
+                    });
+                    showMessage({severity: 'success', detail: `Bienvenido, ${userInfo.name}`})
+                    return;
+                }
+            }
+            
+            await authService.removeUserInfo();
             authService.removeLocalSessionToken();
+            setIsAuthenticated(false);
             setSessionToken(null);
             setUserInfo(null);
         } finally {

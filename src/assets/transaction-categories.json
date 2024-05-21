@@ -1,0 +1,92 @@
+[
+    {
+        "id": "b8b1e7cf-5f37-4f9e-8eb7-17d261b75c4e",
+        "type": "income",
+        "name": "Salario",
+        "hexColor": "#77dd77"
+    },
+    {
+        "id": "0a1a8d7a-6d4a-448c-95f5-3b56ab89d4bb",
+        "type": "income",
+        "name": "Bono",
+        "hexColor": "#ffb6c1"
+    },
+    {
+        "id": "ea17cf07-5c4c-486b-89d8-8f0bc5a68dcf",
+        "type": "income",
+        "name": "Comisiones",
+        "hexColor": "#ffec8b"
+    },
+    {
+        "id": "daae41e9-7344-4862-848d-2cfed9fd5fc3",
+        "type": "income",
+        "name": "Ingresos por alquiler",
+        "hexColor": "#b19cd9"
+    },
+    {
+        "id": "c2f8db0c-9a35-42b8-b16b-8d7b4e2262b0",
+        "type": "income",
+        "name": "Dividendos",
+        "hexColor": "#add8e6"
+    },
+    {
+        "id": "1ab0df48-5b81-4f43-bb3a-78b7ee3f4ab0",
+        "type": "outcome",
+        "name": "Alquiler",
+        "hexColor": "#ff7f50"
+    },
+    {
+        "id": "ff3e3a1d-8e84-42f0-a24d-0a457f29f309",
+        "type": "outcome",
+        "name": "Comida",
+        "hexColor": "#77dd77"
+    },
+    {
+        "id": "e2a48be3-2e3a-4b9b-8995-60d6ef501207",
+        "type": "outcome",
+        "name": "Transporte",
+        "hexColor": "#ffb6c1"
+    },
+    {
+        "id": "4bc69e7d-1013-4630-80bb-d227d98b02e5",
+        "type": "outcome",
+        "name": "Entretenimiento",
+        "hexColor": "#ffec8b"
+    },
+    {
+        "id": "f2321c82-d6cc-4249-a575-476d0bf6e3ae",
+        "type": "outcome",
+        "name": "Facturas",
+        "hexColor": "#b19cd9"
+    },
+    {
+        "id": "71d72da5-9401-4dc0-afe6-86054f24cfd1",
+        "type": "outcome",
+        "name": "Educación",
+        "hexColor": "#add8e6"
+    },
+    {
+        "id": "ea830f2a-c83f-4439-9b9d-d7269f7b7d22",
+        "type": "outcome",
+        "name": "Salud",
+        "hexColor": "#ff69b4"
+    },
+    {
+        "id": "3c0c8eb0-9c47-47de-b07b-59e0eb3a2e14",
+        "type": "outcome",
+        "name": "Ropa",
+        "hexColor": "#d8bfd8"
+    },
+    {
+        "id": "40a15c36-b02e-473f-8ae4-aa839d0fe7c5",
+        "type": "outcome",
+        "name": "Hogar",
+        "hexColor": "#ffefd5"
+    },
+    {
+        "id": "89220de7-83a4-40e1-8416-3722a60f28b1",
+        "type": "outcome",
+        "name": "Viajes",
+        "hexColor": "#b0e0e6"
+    }
+]

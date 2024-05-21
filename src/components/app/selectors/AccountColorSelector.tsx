@@ -32,13 +32,13 @@ export const AccountColorSelector = (props: AccountColorSelectorProps) => {
                 />
                 <p className="text-gray-500">Personalizar...</p>
             </div>
-            <div className="flex gap-2 justify-content-center align-items-center overflow-hidden">
+            <div className="grid gap-2 justify-content-center align-items-center overflow-hidden">
                 {SOME_COLORS.map((color, index) => (
                     <Button
                         key={index}
                         onClick={() => handleSelection(color)}
                         rounded
-                        icon={color === value ? "pi pi-check" : ""}
+                        // icon={color === value ? "pi pi-check" : ""}
                         className="my-2"
                         style={{
                             backgroundColor: `#${color}`,

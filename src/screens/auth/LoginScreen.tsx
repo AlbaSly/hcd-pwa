@@ -41,6 +41,10 @@ export const LoginScreen = () => {
                 navigate('/app');
             })
             .catch(error => {
+                showMessage({
+                    severity: 'error',
+                    detail: (typeof error == "string" ? error : 'Hubo un error')
+                });
                 console.log(error);
             });
         },

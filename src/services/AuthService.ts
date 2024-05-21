@@ -1,7 +1,8 @@
 import { AxiosError } from "axios";
 import { config } from "../configs";
 import { AxiosClient } from "../interceptors/AxiosClient";
-import { LoginData, RegisterData } from "../interfaces";
+import { LoginData, RegisterData, UserInfo } from "../interfaces";
+import { initializeDB, Stores } from "../lib/db";
 
 export class AuthService {
 
@@ -26,6 +27,55 @@ export class AuthService {
                 return Promise.reject(error.message);
             }
             return Promise.reject((error as any));
+        }
+    }
+
+    async getUserInfo() {
+        try {
+            const db = await initializeDB();
+            const tx = db.transaction(Stores.UserInfo, 'readonly');
+            const store = tx.objectStore(Stores.UserInfo);
+
+            const userInfo = await store.getAll();
+
+            await tx.done;
+
+            return userInfo.length > 0 ? userInfo[0] : null;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async saveUserInfo(userInfo: UserInfo) {
+        try {
+            const db = await initializeDB();
+            const tx = db.transaction(Stores.UserInfo, 'readwrite');
+            const store = tx.objectStore(Stores.UserInfo);
+
+            const userInfoFound = await store.get(userInfo.id);
+
+            if (!userInfoFound) {
+                await store.add(userInfo);
+            }
+
+            await store.put(userInfo);
+            await tx.done;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async removeUserInfo() {
+        try {
+            const db = await initializeDB();
+            const tx = db.transaction(Stores.UserInfo, 'readwrite');
+            const store = tx.objectStore(Stores.UserInfo);
+
+            await store.clear();
+
+            await tx.done;
+        } catch (error) {
+            console.error(error);
         }
     }
 

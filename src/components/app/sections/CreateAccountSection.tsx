@@ -1,56 +1,95 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 
-import { CreateAccount, Currency, Periodicity } from "../../../interfaces";
+import { Account, CreateAccount, Currency, Periodicity } from "../../../interfaces";
 import { CurrencySelector } from "../selectors/CurrencySelector";
 import { AccountColorSelector } from "../selectors/AccountColorSelector";
 import { AccountPeriodicitySelector } from "../selectors/AccountPeriodicitySelector";
-import { useToast } from "../../../context/ToastContext";
 import { useApp } from "../../../context/AppContext";
 import { MAX_DECIMAL_LENGTH } from "../../../constants/app-constants";
 import { useAccounts } from "../../../hooks/useAccounts";
 
-export const CreateAccountSection = () => {
+
+type CreateAccountSectionProps = {
+    editionMode?: boolean;
+    accountToEdit?: Account;
+
+    showFromExternalComponent?: boolean;
+    editionFinishedHandler?: () => void;
+}
+export const CreateAccountSection = (props: CreateAccountSectionProps) => {
     
     const {
         defaultAccountValue,
         periodicities,
         currencies,
         loadAccounts,
+        loadTransactions,
+        updateFilteredTransactions,
     } = useApp();
 
     const {
+        editAccount,
         createAccount,
         generateName,
     } = useAccounts();
 
-    const dialogsPosition = "center";
-    
-    const [ accountName, setAccountName ] = useState<string>(defaultAccountValue.name);
-    const [ accountPeriodicity, setAccountPeriodicity ] = useState<Periodicity>(defaultAccountValue.periodicity);
-    const [ amount, setamount ] = useState<number>(defaultAccountValue.amount);
-    const [ accountColor, setAccountColor ] = useState<string>(defaultAccountValue.hexColor);
-    const [ accountCurrency, setAccountCurrency ] = useState<Currency>(defaultAccountValue.currency);
+    const {
+        editionMode,
+        accountToEdit,
+        showFromExternalComponent,
+        editionFinishedHandler,
+    } = props;
 
-    const updateamount = (value: number) => setamount(value);
+    const dialogsPosition = "center";
+    const [ headerTitle ] = useState(editionMode ? 'Editar Cuenta' : 'Nueva Cuenta');
+    
+    const [ accountName, setAccountName ] = useState<string>(accountToEdit ? accountToEdit.name : defaultAccountValue.name);
+    const [ accountPeriodicity, setAccountPeriodicity ] = useState<Periodicity>(accountToEdit ? accountToEdit.periodicity : defaultAccountValue.periodicity);
+    const [ initialAmount, setInitialAmount ] = useState<number>(accountToEdit ? accountToEdit.initialAmount : 0);
+    const [ accountColor, setAccountColor ] = useState<string>(accountToEdit ? accountToEdit.hexColor : defaultAccountValue.hexColor);
+    const [ accountCurrency, setAccountCurrency ] = useState<Currency>(accountToEdit ? accountToEdit.currency : defaultAccountValue.currency);
+
+    const updateamount = (value: number) => setInitialAmount(value);
     const updateAccountName = (value: string) => setAccountName(value);
 
     const create = async () => {
 
+        if (editionMode) {
+            const account: Partial<Account> = {
+                name: accountName,
+                currency: accountCurrency,
+                periodicity: accountPeriodicity,
+                initialAmount,
+                hexColor: accountColor,
+            }
+            await editAccount(accountToEdit!.id, account);
+            await updateFilteredTransactions(accountToEdit!.id);
+
+            loadAccounts();
+            loadTransactions();
+            
+            closeDialogs();
+
+            return;
+        }
+
         const account: CreateAccount = {
             name: accountName,
             currency: accountCurrency,
-            amount,
+            initialAmount,
             periodicity: accountPeriodicity,
             hexColor: accountColor,
         }
 
         await createAccount(account);
+        
         loadAccounts();
+        loadTransactions();
 
         closeDialogs();
     }
@@ -58,7 +97,7 @@ export const CreateAccountSection = () => {
     function resetStates() {
         setAccountName(generateName());
         setAccountPeriodicity(defaultAccountValue.periodicity);
-        setamount(defaultAccountValue.amount);
+        setInitialAmount(defaultAccountValue.initialAmount);
         setAccountColor(defaultAccountValue.hexColor);
         setAccountCurrency(defaultAccountValue.currency);
     }
@@ -112,15 +151,23 @@ export const CreateAccountSection = () => {
         setShowSection2(false);
         setShowSection3(false);
 
+        if (editionFinishedHandler) editionFinishedHandler();
+
         resetStates();
     }
 
+    useEffect(() => {
+        if (showFromExternalComponent) setShowSection1(true);
+    }, [showFromExternalComponent]);
+
     return (
         <>
-            <Button onClick={() => setShowSection1(true)} icon="pi pi-plus" rounded text raised className="bg-white font-bold"/>
+            {
+                !editionMode && <Button onClick={() => setShowSection1(true)} icon="pi pi-plus" rounded text raised className="bg-white font-bold"/>
+            }
 
             <Dialog 
-                header="Nueva Cuenta" 
+                header={headerTitle} 
                 visible={showSection1} 
                 onHide={closeDialogs} 
                 draggable={false}
@@ -129,7 +176,7 @@ export const CreateAccountSection = () => {
                 footer={section1Footer}
             >
                 <section>
-                    <h3>¿Cómo planeas gestionar tus gastos?</h3>
+                    <h3>¿Cómo planeas gestionar tus cortes?</h3>
                     <AccountPeriodicitySelector value={accountPeriodicity} periodicities={periodicities} handleSelection={setAccountPeriodicity}/>
 
                     <p className="text-gray-500"><small>Nota: Esto es solo como referencia.</small></p>
@@ -137,7 +184,7 @@ export const CreateAccountSection = () => {
             </Dialog>
 
             <Dialog 
-                header="Nueva Cuenta" 
+                header={headerTitle} 
                 visible={showSection2} 
                 onHide={(closeDialogs)} 
                 draggable={false}
@@ -168,7 +215,7 @@ export const CreateAccountSection = () => {
             </Dialog>
 
             <Dialog
-                header="Nueva Cuenta"
+                header={headerTitle}
                 visible={showSection3} 
                 onHide={closeDialogs} 
                 draggable={false}
@@ -184,12 +231,16 @@ export const CreateAccountSection = () => {
                     {/*@ts-ignore*/}
                     <FloatLabel>
                         <InputNumber
+                            // disabled={(accountToEdit && accountToEdit.transactionsOperated > 0)}
                             id="amount"
                             min={0.00}
                             minFractionDigits={!accountCurrency.decimal_digits ? MAX_DECIMAL_LENGTH : accountCurrency.decimal_digits}
                             maxFractionDigits={!accountCurrency.decimal_digits ? MAX_DECIMAL_LENGTH : accountCurrency.decimal_digits}
-                            value={amount}
-                            onChange={(e) => updateamount(e.value!)}
+                            value={initialAmount}
+                            onChange={(e) => {
+                                updateamount(e.value!);
+                                setInitialAmount(e.value!);
+                            }}
                             className="w-full"
                             prefix={accountCurrency.code + ' '}
                         />
